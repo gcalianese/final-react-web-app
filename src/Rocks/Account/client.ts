@@ -23,7 +23,7 @@ export const getUserById = async (uid : String) => {
 };
 
 // Return list of users follow the user with the given id
-export const getFollowers = async (uid : String) => {
+export const getUsersFollowing = async (uid : String) => {
     console.log("sending for: " + uid)
     const response = await axiosWithCredentials.get(`${USERS_API}/followers/${uid}`);
     console.log("follow response: " + JSON.stringify(response.data))
@@ -31,8 +31,8 @@ export const getFollowers = async (uid : String) => {
 };
 
 // Return the list of users the user with the given id is following
-export const getFollowing = async (uid : String) => {
-    const response = await axiosWithCredentials.get(`${USERS_API}/${uid}`);
+export const getUsersFollowedBy = async (uid : String) => {
+    const response = await axiosWithCredentials.get(`${USERS_API}/follows/${uid}`);
     return response.data;
 };
 

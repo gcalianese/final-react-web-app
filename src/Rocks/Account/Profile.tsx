@@ -33,6 +33,7 @@ export default function Profile() {
 
     const [userProfile, setUserProfile] = useState<User>(currentUser);
     const [userFollowers, setUserFollowers] = useState<User[]>([]);
+    const [userFollowing, setUserFollowing] = useState<User[]>([]);
 
     const signout = async () => {
         await accountClient.signout();
@@ -48,11 +49,15 @@ export default function Profile() {
 
     const fetchUserFollowers = async () => {
         if (hasCid) {
-            const followers = await accountClient.getFollowers(cid as string);
+            const followers = await accountClient.getUsersFollowing(cid as string);
             setUserFollowers(followers);
+            const following = await accountClient.getUsersFollowedBy(cid as string);
+            setUserFollowing(following)
         } else {
-            const followers = await accountClient.getFollowers(currentUser._id as string);
+            const followers = await accountClient.getUsersFollowing(currentUser._id as string);
             setUserFollowers(followers);
+            const following = await accountClient.getUsersFollowedBy(currentUser._id as string);
+            setUserFollowing(following)
         }
     }
 
@@ -83,11 +88,16 @@ export default function Profile() {
             Home Gym: {userProfile.homeGym}<br />
             Followers: {userFollowers.length}<br />
             {userFollowers.map((follower) => (
-                <Link to={`/Rocks/Account/Profile/${follower._id}`} key={follower._id}>
+                <Link to={`/Rocks/Account/Profile/${follower._id}`} key={`followedby-` + follower._id}>
                     {follower.username} <br />
                 </Link>
             ))}
-            Following: {userProfile.followingCount}<br />
+            Following: {userFollowing.length}<br />
+            {userFollowing.map((follows) => (
+                <Link to={`/Rocks/Account/Profile/${follows._id}`} key={`follows-` + follows._id}>
+                    {follows.username} <br />
+                </Link>
+            ))}
             Posts: {userProfile.postCount}<br />
             {!hasCid && (
                 <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">

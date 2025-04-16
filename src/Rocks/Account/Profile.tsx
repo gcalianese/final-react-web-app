@@ -24,23 +24,6 @@ type User = {
     postCount: string;
 };
 
-const defaultUser: User = {
-    _id: "defaultId",
-    username: "defaultUsername",
-    password: "defaultPassword",
-    firstName: "defaultFirstName",
-    email: "defaultEmail",
-    phoneNumber: "defaultPhoneNumber",
-    lastName: "defaultLastName",
-    dob: new Date(),
-    role: "USER",
-    loginId: "defaultLoginId",
-    homeGym: "defaultHomeGym",
-    followerCount: "0",
-    followingCount: "0",
-    postCount: "0",
-};
-
 export default function Profile() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const { cid } = useParams();
@@ -52,7 +35,7 @@ export default function Profile() {
     const [userFollowers, setUserFollowers] = useState<User[]>([]);
 
     const signout = async () => {
-        const status = await accountClient.signout();
+        await accountClient.signout();
         dispatch(accountReducer.setCurrentUser(null));
         navigate("/Rocks/Home");
     }

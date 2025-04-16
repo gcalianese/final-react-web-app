@@ -1,14 +1,12 @@
 import { AiOutlineDashboard } from "react-icons/ai";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { PiHouseLineFill } from "react-icons/pi";
-import { FaBell } from "react-icons/fa6";
 
 
 export default function NavBar() {
-    const { pathname } = useLocation();
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     // Users still have access even when not logged in

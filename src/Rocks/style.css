@@ -1,0 +1,47 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (min-width: 768px) {
+    .rocks-main-content-offset {
+        padding-left: 140px !important;
+    }
+}
+
+#rocks {
+    padding: 10px;
+    padding-top: 6px;
+}
+
+.nav-bar {
+    width: 120px;
+    height: 100vh;
+    background-color: rgb(90, 17, 114);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    text-align: center;
+}
+
+.nav-link-text {
+    text-decoration: none;
+    color: white;
+    padding: 3px;
+}
+
+.rocks-logo-text {
+    font-size: 20px;
+    color: rgb(112, 166, 237);
+    margin-bottom: 10px;
+}
+
+.rocks-logo-container {
+    padding: 3px;
+    margin-bottom: 50px;
+}

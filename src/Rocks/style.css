@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: rgb(222, 201, 220);
 }
 
 body * {
@@ -37,7 +38,7 @@ body * {
 
 .rocks-logo-text {
     font-size: 20px;
-    color: rgb(112, 166, 237);
+    color: rgb(28, 145, 234);
     margin-bottom: 10px;
 }
 

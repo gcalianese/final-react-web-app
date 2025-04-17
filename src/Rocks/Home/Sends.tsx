@@ -36,11 +36,6 @@ export default function Sends() {
         fetchSends();
     }, []);
 
-    const fetchUsernameById = async (uid : string) => {
-        const user = await accountClient.getUserById(uid as string);
-        return user.username;
-      };
-
     return (
         <div className="rocks-sends-container">
             <h1>Sends</h1>

@@ -5,10 +5,10 @@ import Profile from "./Profile";
 
 export default function Account() {
     return (
-        <div id="rocks-account">
-            < div id="rocks-account-routes">
+        <div id="ct-account">
+            < div id="ct-account-routes">
                 <Routes>
-                    <Route path="/" element={<Navigate to="/Rocks/Account/Signin" />} />
+                    <Route path="/" element={<Navigate to="/Account/Signin" />} />
                     <Route path="/Signin" element={< Signin />} />
                     <Route path="/Signup" element={<Signup />} />
                     <Route path="/Profile/:cid" element={<Profile />} />

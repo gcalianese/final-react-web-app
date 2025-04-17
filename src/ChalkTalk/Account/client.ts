@@ -24,9 +24,7 @@ export const getUserById = async (uid : String) => {
 
 // Return list of users follow the user with the given id
 export const getUsersFollowing = async (uid : String) => {
-    console.log("sending for: " + uid)
     const response = await axiosWithCredentials.get(`${USERS_API}/followers/${uid}`);
-    console.log("follow response: " + JSON.stringify(response.data))
     return response.data;
 };
 

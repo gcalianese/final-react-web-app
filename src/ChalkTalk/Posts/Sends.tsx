@@ -36,9 +36,9 @@ export default function Sends() {
     }, []);
 
     return (
-        <div className="rocks-sends-container">
+        <div className="ct-sends-container">
             <h1>Sends</h1>
-            <div className="rocks-sends-posts d-flex justify-content-center">
+            <div className="ct-sends-posts d-flex justify-content-center">
                 {sends && (
                     <div className="posts">
                         {sends.map(send => (
@@ -47,7 +47,7 @@ export default function Sends() {
                                     <img src={send.img} width="400px" alt="Post" />
                                 )}
                                 <br />
-                                <Link to={`/Rocks/Account/Profile/${send.postedBy}`} key={send._id}>{send.username}</ Link>
+                                <Link to={`/Account/Profile/${send.postedBy}`} key={send._id}>{send.username}</ Link>
                                 <label>{send.caption}</label>
                             </div>
                         ))}

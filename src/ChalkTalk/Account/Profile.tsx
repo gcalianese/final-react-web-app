@@ -55,7 +55,7 @@ export default function Profile() {
     const signout = async () => {
         await accountClient.signout();
         dispatch(accountReducer.setCurrentUser(null));
-        navigate("/Rocks/Home");
+        navigate("/Home");
     }
 
     const fetchUserProfile = async () => {
@@ -88,7 +88,7 @@ export default function Profile() {
     }, [cid, currentUser]);
 
     return (
-        <div className="rocks-profile-container">
+        <div className="ct-profile-container">
             <h1><FaRegCircleUser /> {userProfile.username}</h1>
             First Name: {userProfile.firstName}<br />
             Last Name: {userProfile.lastName}<br />
@@ -109,13 +109,13 @@ export default function Profile() {
             Home Gym: {userProfile.homeGym}<br />
             Followers: {userFollowers.length}<br />
             {userFollowers.map((follower) => (
-                <Link to={`/Rocks/Account/Profile/${follower._id}`} key={`followedby-` + follower._id}>
+                <Link to={`/Account/Profile/${follower._id}`} key={`followedby-` + follower._id}>
                     {follower.username} <br />
                 </Link>
             ))}
             Following: {userFollowing.length}<br />
             {userFollowing.map((follows) => (
-                <Link to={`/Rocks/Account/Profile/${follows._id}`} key={`follows-` + follows._id}>
+                <Link to={`/Account/Profile/${follows._id}`} key={`follows-` + follows._id}>
                     {follows.username} <br />
                 </Link>
             ))}

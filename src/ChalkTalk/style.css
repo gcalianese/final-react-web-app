@@ -9,12 +9,12 @@ body * {
 }
 
 @media (min-width: 768px) {
-    .rocks-main-content-offset {
+    .ct-main-content-offset {
         padding-left: 140px !important;
     }
 }
 
-#rocks {
+#ct {
     padding: 10px;
     padding-top: 6px;
 }
@@ -27,7 +27,6 @@ body * {
     top: 0;
     left: 0;
     z-index: 10;
-    text-align: center;
 }
 
 .nav-link-text {
@@ -36,15 +35,21 @@ body * {
     padding: 3px;
 }
 
-.rocks-logo-text {
+.nav-link-container {
+    padding: 5px;
+    text-align: left;
+}
+
+.ct-logo-text {
     font-size: 20px;
     color: rgb(28, 145, 234);
     margin-bottom: 10px;
 }
 
-.rocks-logo-container {
+.ct-logo-container {
     padding: 3px;
     margin-bottom: 50px;
+    text-align: center;
 }
 
 .debug-border {
@@ -52,11 +57,11 @@ body * {
     border: 5px red !important
 }
 
-.rocks-sends-container {
+.ct-sends-container {
     background-color: aqua;
 }
 
-.rocks-sends-posts {
+.ct-sends-posts {
     background-color: rgb(222, 201, 220);
     text-align: center;
 }

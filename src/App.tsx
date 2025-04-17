@@ -1,6 +1,6 @@
-import store from "./Rocks/store";
+import store from "./ChalkTalk/store";
 import { Provider } from "react-redux";
-import Rocks from "./Rocks";
+import ChalkTalk from "./ChalkTalk";
 
 import { HashRouter, Route, Routes, Navigate } from "react-router-dom";
 export default function App() {
@@ -9,8 +9,8 @@ export default function App() {
       <Provider store={store}>
         <div>
           <Routes>
-            <Route path="/" element={<Navigate to="Rocks" />} />
-            <Route path="/Rocks/*" element={<Rocks />} />
+            <Route path="/" element={<Navigate to="/Home" />} />
+            <Route path="/Home/*" element={<ChalkTalk />} />
           </Routes>
         </div>
       </Provider>

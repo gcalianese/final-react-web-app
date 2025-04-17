@@ -1,22 +1,22 @@
 import { Routes, Route, Navigate } from "react-router";
-import Home from "./Home";
 import Account from "./Account";
 import "./style.css"
 import NavBar from "./NavBar";
 import Session from "./Account/Session";
 import Posts from "./Posts";
+import HomePage from "./Home/HomePage";
 
-export default function Rocks() {
+export default function ChalkTalk() {
     return (
         <Session>
-            <div id="rocks">
+            <div id="ct">
                 <NavBar />
-                <div className="rocks-main-content-offset p-3">
+                <div className="ct-main-content-offset p-3">
 
                     <Routes>
-                        <Route path="/" element={<Navigate to="/Rocks/Home" />} />
+                        <Route path="/" element={<Navigate to="/Home" />} />
                         <Route path="/Account/*" element={<Account />} />
-                        <Route path="/Home/*" element={<Home />}></Route>
+                        <Route path="/Home/*" element={<HomePage />}></Route>
                         <Route path="/Posts/*" element={<Posts />}></Route>
                     </Routes>
                 </div>

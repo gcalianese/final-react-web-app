@@ -45,3 +45,17 @@ body * {
     padding: 3px;
     margin-bottom: 50px;
 }
+
+.debug-border {
+    width: 300px;
+    border: 5px red !important
+}
+
+.rocks-sends-container {
+    background-color: aqua;
+}
+
+.rocks-sends-posts {
+    background-color: rgb(222, 201, 220);
+    text-align: center;
+}

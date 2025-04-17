@@ -59,9 +59,13 @@ export default function Profile() {
     }
 
     const fetchUserProfile = async () => {
-        if (!hasCid) return;
-        const user = await accountClient.getUserById(cid as string);
-        setUserProfile(user);
+        if (hasCid) {
+            const user = await accountClient.getUserById(cid as string);
+            setUserProfile(user);
+        } else if (currentUser) {
+            const user = await accountClient.getUserById(currentUser._id as string);
+            setUserProfile(user);
+        }
     }
 
     const fetchUserFollowers = async () => {
@@ -81,7 +85,7 @@ export default function Profile() {
     useEffect(() => {
         fetchUserProfile();
         fetchUserFollowers();
-    }, [cid]);
+    }, [cid, currentUser]);
 
     return (
         <div className="rocks-profile-container">
@@ -99,7 +103,7 @@ export default function Profile() {
                 <>
                     Email: {userProfile.email}<br />
                     Phone Number: {userProfile.phoneNumber}<br />
-                    Birthday: {userProfile.dob}<br />
+                    Birthday: {new Date(userProfile.dob).toLocaleDateString()}<br />
                 </>
             )}
             Home Gym: {userProfile.homeGym}<br />

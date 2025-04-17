@@ -8,13 +8,14 @@ export default function Posts() {
 
     return (
         <div>
+            <h1>Posts</h1>
             <div className="p-3">
                 <Routes>
                     <Route path="/" element={<Navigate to="/Posts/Sends" />} />
-                    <Route path="/Sends" element={<Sends />}></Route>
-                    <Route path="/Gyms" element={<Gyms />}></Route>
-                    <Route path="/Gear" element={<Gear />}></Route>
-                    <Route path="/FT" element={<FT />}></Route>
+                    <Route path="/Sends" element={<Sends />} />
+                    <Route path="/Gyms" element={<Gyms />}/>
+                    <Route path="/Gear" element={<Gear />}/>
+                    <Route path="/FT" element={<FT />}/>
                 </Routes>
             </div>
         </div>

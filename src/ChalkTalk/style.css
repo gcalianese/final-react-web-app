@@ -20,7 +20,7 @@ body * {
 }
 
 .nav-bar {
-    width: 120px;
+    width: 130px;
     height: 100vh;
     background-color: rgb(90, 17, 114);
     position: fixed;
@@ -30,12 +30,19 @@ body * {
 }
 
 .nav-link-text {
-    text-decoration: none;
     color: white;
-    padding: 3px;
+    padding: 5px;
 }
 
+/*
+Spacing between nav bar icon and link
+*/
+.nav-link-text svg {
+    margin-right: 3px;
+  }
+
 .nav-link-container {
+    text-decoration: none !important;
     padding: 5px;
     text-align: left;
 }

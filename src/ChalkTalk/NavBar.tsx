@@ -19,6 +19,7 @@ export default function NavBar() {
             { label: "Gyms", path: "/Posts/Gyms", icon: AiOutlineDashboard },
             { label: "Gear", path: "/Posts/Gear", icon: AiOutlineDashboard },
             { label: "Fit/Tech", path: "/Posts/FT", icon: AiOutlineDashboard },
+            { label: "Find a Gym", path: "/Search", icon: HiMagnifyingGlass },
         ]
         : [
             { label: "Home", path: "/Home", icon: PiHouseLineFill },
@@ -26,7 +27,7 @@ export default function NavBar() {
             { label: "Gyms", path: "/Posts/Gyms", icon: AiOutlineDashboard },
             { label: "Gear", path: "/Posts/Gear", icon: AiOutlineDashboard },
             { label: "Fit/Tech", path: "/Posts/FT", icon: AiOutlineDashboard },
-            { label: "Find a gym", path: "/Search", icon: HiMagnifyingGlass },
+            { label: "Find a Gym", path: "/Search", icon: HiMagnifyingGlass },
             { label: "Signin", path: "/Account/Signin", icon: AiOutlineDashboard },
             { label: "Signup", path: "/Account/Signup", icon: AiOutlineDashboard },
         ];

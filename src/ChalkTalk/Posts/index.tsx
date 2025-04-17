@@ -8,7 +8,6 @@ export default function Posts() {
 
     return (
         <div>
-            <h1>Posts</h1>
             <div className="p-3">
                 <Routes>
                     <Route path="/" element={<Navigate to="/Posts/Sends" />} />

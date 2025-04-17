@@ -35,7 +35,7 @@ export default function NavBar() {
     return (
         <div className="nav-bar">
             <ListGroup id="ct-navigation"
-                className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block bg-black z-2" >
+                className="rounded-0 position-fixed bottom-0 top-0 d-none d-md-block z-2" >
                 <ListGroup.Item key="ct-logo" className="ct-logo-container">
                     <label className="ct-logo-text">ChalkTalk</label>
                     {currentUser && <><br /><br /> <label className="ct-logo-text">Welcome, {currentUser.firstName}</label></>}

@@ -14,17 +14,17 @@ export default function NavBar() {
         ? [
             { label: "Home", path: "/Rocks/Home", icon: PiHouseLineFill },
             { label: "My Profile", path: `/Rocks/Account/Profile`, icon: FaRegCircleUser },
-            { label: "Sends", path: "/Rocks/Home/Sends", icon: AiOutlineDashboard },
-            { label: "Gyms", path: "/Rocks/Home/Gyms", icon: AiOutlineDashboard },
-            { label: "Gear", path: "/Rocks/Home/Gear", icon: AiOutlineDashboard },
-            { label: "Fit/Tech", path: "/Rocks/Home/FT", icon: AiOutlineDashboard },
+            { label: "Sends", path: "/Rocks/Posts/Sends", icon: AiOutlineDashboard },
+            { label: "Gyms", path: "/Rocks/Posts/Gyms", icon: AiOutlineDashboard },
+            { label: "Gear", path: "/Rocks/Posts/Gear", icon: AiOutlineDashboard },
+            { label: "Fit/Tech", path: "/Rocks/Posts/FT", icon: AiOutlineDashboard },
         ]
         : [
             { label: "Home", path: "/Rocks/Home", icon: PiHouseLineFill },
-            { label: "Sends", path: "/Rocks/Home/Sends", icon: AiOutlineDashboard },
-            { label: "Gyms", path: "/Rocks/Home/Gyms", icon: AiOutlineDashboard },
-            { label: "Gear", path: "/Rocks/Home/Gear", icon: AiOutlineDashboard },
-            { label: "Fit/Tech", path: "/Rocks/Home/FT", icon: AiOutlineDashboard },
+            { label: "Sends", path: "/Rocks/Posts/Sends", icon: AiOutlineDashboard },
+            { label: "Gyms", path: "/Rocks/Posts/Gyms", icon: AiOutlineDashboard },
+            { label: "Gear", path: "/Rocks/Posts/Gear", icon: AiOutlineDashboard },
+            { label: "Fit/Tech", path: "/Rocks/Posts/FT", icon: AiOutlineDashboard },
             { label: "Signin", path: "/Rocks/Account/Signin", icon: AiOutlineDashboard },
             { label: "Signup", path: "/Rocks/Account/Signup", icon: AiOutlineDashboard },
         ];

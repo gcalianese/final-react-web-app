@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from "react-router";
-import Sends from "./Sends";
-import Gyms from "./Gyms";
-import Gear from "./Gear";
-import FT from "./FT";
+import Sends from "../Posts/Sends";
+import Gyms from "../Posts/Gyms";
+import Gear from "../Posts/Gear";
+import FT from "../Posts/FT";
 
 export default function Home() {
 
@@ -12,11 +12,7 @@ export default function Home() {
             <div className="p-3">
                 <Routes>
                     <Route path="/" element={<Navigate to="/Rocks/Home" />} />
-                    <Route path="/Sends" element={<Sends />}></Route>
-                    <Route path="/Gyms" element={<Gyms />}></Route>
-                    <Route path="/Gear" element={<Gear />}></Route>
-                    <Route path="/FT" element={<FT />}></Route>
-                    <Route path="/*" element={<Home />}></Route>
+                    <Route path="/Home" element={<Home />}></Route>
                 </Routes>
             </div>
         </div>

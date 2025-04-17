@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import * as postClient from "../Home/Post/client"
+import * as postClient from "./client"
 import { Link } from "react-router";
 
 export default function Sends() {

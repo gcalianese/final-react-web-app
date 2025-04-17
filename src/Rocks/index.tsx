@@ -4,6 +4,7 @@ import Account from "./Account";
 import "./style.css"
 import NavBar from "./NavBar";
 import Session from "./Account/Session";
+import Posts from "./Posts";
 
 export default function Rocks() {
     return (
@@ -16,6 +17,7 @@ export default function Rocks() {
                         <Route path="/" element={<Navigate to="/Rocks/Home" />} />
                         <Route path="/Account/*" element={<Account />} />
                         <Route path="/Home/*" element={<Home />}></Route>
+                        <Route path="/Posts/*" element={<Posts />}></Route>
                     </Routes>
                 </div>
             </div>

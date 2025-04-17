@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import accountReducer from "../Rocks/Account/reducer"
-import postReducer from "../Rocks/Home/Post/reducer"
+import postReducer from "./Posts/reducer"
 
 const store = configureStore({
     reducer: {

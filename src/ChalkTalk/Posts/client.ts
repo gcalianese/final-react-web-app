@@ -29,3 +29,8 @@ export const deletePost = async (pid : string) => {
     const response = await axiosWithCredentials.delete(`${POSTS_API}/${pid}`);
     return response.data;
 }
+
+export const getAllPostsBy = async (uid : string) => {
+    const response = await axiosWithCredentials.get(`${POSTS_API}/by/${uid}`);
+    return response.data;
+}

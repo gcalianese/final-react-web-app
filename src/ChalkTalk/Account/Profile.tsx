@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import * as accountClient from "./client"
 import * as accountReducer from "./reducer"
+import * as postClient from "../Posts/client"
 import { FaRegCircleUser } from "react-icons/fa6";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router";
@@ -51,6 +52,7 @@ export default function Profile() {
     const [userProfile, setUserProfile] = useState<User>(defaultUser);
     const [userFollowers, setUserFollowers] = useState<User[]>([]);
     const [userFollowing, setUserFollowing] = useState<User[]>([]);
+    const [userPosts, setUserPosts]  = useState<User[]>([]);
 
     const signout = async () => {
         await accountClient.signout();
@@ -82,9 +84,20 @@ export default function Profile() {
         }
     }
 
+    const fetchPosts = async () => {
+        if (hasCid) {
+            const posts = await postClient.getAllPostsBy(cid as string);
+            setUserPosts(posts);
+        } else {
+            const posts = await postClient.getAllPostsBy(currentUser._id as string);
+            setUserPosts(posts);
+        }
+    }
+
     useEffect(() => {
         fetchUserProfile();
         fetchUserFollowers();
+        fetchPosts();
     }, [cid, currentUser]);
 
     return (
@@ -119,7 +132,7 @@ export default function Profile() {
                     {follows.username} <br />
                 </Link>
             ))}
-            Posts: {userProfile.postCount}<br />
+            Posts: {userPosts.length}<br />
             {!hasCid && (
                 <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
                     Sign out

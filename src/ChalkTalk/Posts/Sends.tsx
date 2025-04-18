@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import PostPreview from "./PostPreview";
+import Popup from "../Account/Popup";
 
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
@@ -45,11 +46,15 @@ export default function Sends() {
     const [file, setFile] = useState<File | null>(null);
     const [showPreview, setShowPreview] = useState(false);
     const [previewURL, setPreviewURL] = useState<string>("");
+    const [showSigninPopup, setShowSigninPopup] = useState(false);
+    const [redirectToSignin, setRedirectToSignin] = useState(false);
 
     const handleAddPost = () => {
         if (currentUser) {
             const fileInput = document.getElementById("fileInput") as HTMLInputElement;
             fileInput?.click();
+        } else {
+            setShowSigninPopup(true);
         }
     };
 
@@ -144,6 +149,17 @@ export default function Sends() {
                 </div>
             )}
             {showPreview && file && <PostPreview previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
+            {showSigninPopup && (
+                <Popup
+                    restriction="post a send"
+                    onClose={() => setShowSigninPopup(false)}
+                    onSignIn={() => {
+                        setShowSigninPopup(false);
+                        setRedirectToSignin(true);
+                    }}
+                />
+            )}
+            {redirectToSignin && <Navigate to="/Account/Signin"/>}
         </div>
     );
 }

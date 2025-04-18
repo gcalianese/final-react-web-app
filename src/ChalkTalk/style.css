@@ -30,7 +30,7 @@ body * {
 }
 
 .nav-link-text {
-    color: white;
+    color: rgb(112, 182, 243);
     padding: 5px;
 }
 
@@ -39,6 +39,7 @@ Spacing between nav bar icon and link
 */
 .nav-link-text svg {
     margin-right: 3px;
+    color: rgb(112, 182, 243)
 }
 
 .nav-link-container {
@@ -49,13 +50,11 @@ Spacing between nav bar icon and link
 
 .ct-logo-text {
     font-size: 20px;
-    color: rgb(28, 145, 234);
-    margin-bottom: 10px;
+    color: rgb(112, 182, 243)
 }
 
 .ct-logo-container {
     padding: 3px;
-    margin-bottom: 50px;
     text-align: center;
 }
 
@@ -192,4 +191,9 @@ Spacing between nav bar icon and link
 
 .popup-btn.confirm:hover {
     background-color: rgb(173, 103, 196);
+}
+
+.ct-logo {
+    font-size: 50px;
+    color: rgb(112, 182, 243)
 }

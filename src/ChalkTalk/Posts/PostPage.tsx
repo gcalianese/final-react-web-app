@@ -128,9 +128,8 @@ export default function PostPage({ cat }: { cat: string }) {
                         {posts.map((post) => (
                             <div key={post._id} className="border post">
                                 <br />
-                                {post.img && <img src={`${REMOTE_SERVER}/${post.img}`} width="400px" alt="Post" />}
-                                {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (
-                                    <Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
+                                {post.img && <img src={post.img} width="400px" alt="Post" />}
+                                {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
                                 <br />
                                 <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}>
                                     {post.username}
@@ -159,7 +158,7 @@ export default function PostPage({ cat }: { cat: string }) {
                     }}
                 />
             )}
-            {redirectToSignin && <Navigate to="/Account/Signin"/>}
+            {redirectToSignin && <Navigate to="/Account/Signin" />}
         </div>
     );
 }

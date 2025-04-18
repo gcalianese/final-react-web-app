@@ -124,7 +124,8 @@ export default function Sends() {
                             <div key={send._id} className="border post">
                                 <br />
                                 {send.img && <img src={`${REMOTE_SERVER}/${send.img}`} width="400px" alt="Post" />}
-                                <Button onClick={() => handleDelete(send._id)}><FaTrash /></Button>
+                                {currentUser && (currentUser.role === "ADMIN" || send.postedBy === currentUser._id) && (
+                                    <Button onClick={() => handleDelete(send._id)}><FaTrash /></Button>)}
                                 <br />
                                 <Link to={`/Account/Profile/${send.postedBy}`} key={send._id}>
                                     {send.username}

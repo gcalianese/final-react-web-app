@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-import axios from "axios";
 import * as postClient from "./client";
 import { Link } from "react-router";
 
@@ -16,17 +15,17 @@ export default function Sends() {
     _id: string;
     postedBy: string;
     username: string;
-    category: "SENDS" | "GYMS" | "GEAR" | "FT"; // Enum for category
+    category: "SENDS" | "GYMS" | "GEAR" | "FT";
     img: string;
     caption: string;
-    likedBy: string[]; // Array of user IDs (string)
+    likedBy: string[];
     createdAt: Date;
     updatedAt: Date;
   };
 
   const [sends, setSends] = useState<Post[]>([]);
 
-  // Fetch posts for user or all posts
+  // Fetch sends for user if logged in or all sends if not
   const fetchSends = async () => {
     if (!currentUser) {
       const sends = await postClient.getAllSends();
@@ -41,10 +40,8 @@ export default function Sends() {
     fetchSends();
   }, [currentUser]);
 
-  // File handling state
   const [file, setFile] = useState<File | null>(null);
 
-  // Trigger the file input click
   const handleButtonClick = () => {
     const fileInput = document.getElementById("fileInput") as HTMLInputElement;
     fileInput?.click();
@@ -54,9 +51,9 @@ export default function Sends() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile); // Set the file in the state
+      setFile(selectedFile);
       console.log("Selected file:", selectedFile);
-      handleSubmit(selectedFile); // Automatically submit once file is selected
+      handleSubmit(selectedFile); // Automatically submit once file is selected, TODO: confirmation popup
     }
   };
 
@@ -66,15 +63,10 @@ export default function Sends() {
     formData.append("image", selectedFile);
 
     try {
-      const response = await axios.post(`${POSTS_API}/sends`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log("Image uploaded successfully:", response.data);
-      alert("Image uploaded successfully!");
-      fetchSends(); // Refresh sends after upload
+        postClient.uploadImage(formData);
+        console.log("Image uploaded successfully");
+        alert("Image uploaded successfully!");
+        fetchSends();
     } catch (error) {
       console.error("Error uploading image:", error);
       alert("Failed to upload image. Please try again.");
@@ -95,7 +87,7 @@ export default function Sends() {
         type="file"
         id="fileInput"
         style={{ display: "none" }} // Hide the input element
-        onChange={handleFileChange} // Handle file selection
+        onChange={handleFileChange}
       />
       <div className="ct-sends-posts d-flex justify-content-center">
         {sends && (
@@ -114,11 +106,10 @@ export default function Sends() {
         )}
       </div>
 
-      {/* Display selected file info */}
+      {/* TODO: Confrimation popup + verify it's an image file beffore uploading */}
       {file && (
         <div>
           <h4>File Selected: {file.name}</h4>
-          {/* The upload happens automatically after selection */}
         </div>
       )}
     </div>

@@ -15,3 +15,11 @@ export const getSendsForUser = async (cid : string) => {
     const response = await axiosWithCredentials.get(`${POSTS_API}/sends/${cid}`);
     return response.data;
 };
+
+export const uploadImage = async (formData : any) => {
+    const response = await axiosWithCredentials.post(`${POSTS_API}/sends`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+}

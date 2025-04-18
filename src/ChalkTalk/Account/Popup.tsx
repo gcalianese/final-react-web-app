@@ -1,5 +1,3 @@
-import { Navigate } from "react-router";
-
 type PopupProps = {
     restriction: string; // Pass in the restricted action to print out in the message
     onClose: () => void;

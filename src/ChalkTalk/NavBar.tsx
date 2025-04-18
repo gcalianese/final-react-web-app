@@ -16,7 +16,6 @@ export default function NavBar() {
             { label: "Home", path: "/Home", icon: PiHouseLineFill },
             { label: "My Profile", path: `/Account/Profile`, icon: FaRegCircleUser },
             { label: "Sends", path: "/Posts/Sends", icon: AiOutlineDashboard },
-            { label: "Gyms", path: "/Posts/Gyms", icon: AiOutlineDashboard },
             { label: "Gear", path: "/Posts/Gear", icon: AiOutlineDashboard },
             { label: "Fit/Tech", path: "/Posts/FT", icon: AiOutlineDashboard },
             { label: "Find a Gym", path: "/Search", icon: HiMagnifyingGlass },
@@ -24,7 +23,6 @@ export default function NavBar() {
         : [
             { label: "Home", path: "/Home", icon: PiHouseLineFill },
             { label: "Sends", path: "/Posts/Sends", icon: AiOutlineDashboard },
-            { label: "Gyms", path: "/Posts/Gyms", icon: AiOutlineDashboard },
             { label: "Gear", path: "/Posts/Gear", icon: AiOutlineDashboard },
             { label: "Fit/Tech", path: "/Posts/FT", icon: AiOutlineDashboard },
             { label: "Find a Gym", path: "/Search", icon: HiMagnifyingGlass },

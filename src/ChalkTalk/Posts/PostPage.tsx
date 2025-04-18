@@ -11,14 +11,14 @@ import Popup from "../Account/Popup";
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
 
-export default function Sends() {
+export default function PostPage({ cat }: { cat: string }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
     type Post = {
         _id: string;
         postedBy: string;
         username: string;
-        category: "SENDS" | "GYMS" | "GEAR" | "FT";
+        category: "SENDS" | "GEAR" | "FT";
         img: string;
         caption: string;
         likedBy: string[];
@@ -26,22 +26,22 @@ export default function Sends() {
         updatedAt: Date;
     };
 
-    const [sends, setSends] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
 
-    // Fetch sends for user if logged in or all sends if not
-    const fetchSends = async () => {
+    // Fetch posts for user if logged in or all posts if not
+    const fetchPosts = async () => {
         if (!currentUser) {
-            const sends = await postClient.getAllSends();
-            setSends(sends);
+            const posts = await postClient.getAllPostsForCat(cat);
+            setPosts(posts);
         } else {
-            const sends = await postClient.getSendsForUser(currentUser._id as string);
-            setSends(sends);
+            const posts = await postClient.getPostsForUser(cat, currentUser._id);
+            setPosts(posts);
         }
     };
 
     useEffect(() => {
-        fetchSends();
-    }, [currentUser]);
+        fetchPosts();
+    }, [currentUser, cat]);
 
     const [file, setFile] = useState<File | null>(null);
     const [showPreview, setShowPreview] = useState(false);
@@ -81,7 +81,7 @@ export default function Sends() {
         if (!file) return;
         const post = {
             postedBy: currentUser._id,
-            category: "SENDS",
+            category: cat,
             caption: caption
         };
 
@@ -91,7 +91,7 @@ export default function Sends() {
 
         try {
             postClient.uploadImage(formData);
-            await fetchSends();
+            await fetchPosts();
             setShowPreview(false);
             setFile(null);
             console.log("Image uploaded successfully");
@@ -103,16 +103,16 @@ export default function Sends() {
 
     const handleDelete = async (pid: string) => {
         await postClient.deletePost(pid);
-        fetchSends();
+        fetchPosts();
     }
 
     return (
-        <div className="ct-sends-container">
+        <div className="ct-posts-container">
             <div className="header">
-                Sends
-                <span className="add-send-button">
+                {cat}
+                <span className="add-post-button">
                     <Button onClick={handleAddPost}>
-                        <FaPlus /> Add a Send
+                        <FaPlus /> Add a {cat} Post
                     </Button>
                 </span>
             </div>
@@ -122,27 +122,27 @@ export default function Sends() {
                 style={{ display: "none" }} // Hide the input element
                 onChange={handleFileChange}
             />
-            <div className="ct-sends-posts d-flex justify-content-center">
-                {sends && (
+            <div className="ct-posts-posts d-flex justify-content-center">
+                {posts && (
                     <div className="posts">
-                        {sends.map((send) => (
-                            <div key={send._id} className="border post">
+                        {posts.map((post) => (
+                            <div key={post._id} className="border post">
                                 <br />
-                                {send.img && <img src={`${REMOTE_SERVER}/${send.img}`} width="400px" alt="Post" />}
-                                {currentUser && (currentUser.role === "ADMIN" || send.postedBy === currentUser._id) && (
-                                    <Button onClick={() => handleDelete(send._id)}><FaTrash /></Button>)}
+                                {post.img && <img src={`${REMOTE_SERVER}/${post.img}`} width="400px" alt="Post" />}
+                                {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (
+                                    <Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
                                 <br />
-                                <Link to={`/Account/Profile/${send.postedBy}`} key={send._id}>
-                                    {send.username}
+                                <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}>
+                                    {post.username}
                                 </Link>
-                                <label>{send.caption}</label>
+                                <label>{post.caption}</label>
                             </div>
                         ))}
                     </div>
                 )}
             </div>
 
-            {/* TODO: Verify it's an image file beffore uploading */}
+            {/* TODO: Verify it's an image file before uploading */}
             {file && (
                 <div>
                     <h4>File Selected: {file.name}</h4>
@@ -151,7 +151,7 @@ export default function Sends() {
             {showPreview && file && <PostPreview previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
             {showSigninPopup && (
                 <Popup
-                    restriction="post a send"
+                    restriction={"post in the " + cat + " thread"}
                     onClose={() => setShowSigninPopup(false)}
                     onSignIn={() => {
                         setShowSigninPopup(false);

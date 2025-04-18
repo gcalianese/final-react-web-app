@@ -4,20 +4,20 @@ const axiosWithCredentials = axios.create({ withCredentials: true });
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
 
-// Get all posts marked "SENDS"
-export const getAllSends = async () => {
-    const response = await axiosWithCredentials.get(`${POSTS_API}/sends`);
+// Get all posts marked with the given category
+export const getAllPostsForCat = async (cat : string) => {
+    const response = await axiosWithCredentials.get(`${POSTS_API}/${cat}`);
     return response.data;
 };
 
-// Get posts marked "SENDS" by users the user with the given cid follows first
-export const getSendsForUser = async (cid : string) => {
-    const response = await axiosWithCredentials.get(`${POSTS_API}/sends/${cid}`);
+// Get posts marked with the given category by users the user with the given uid follows first
+export const getPostsForUser = async (cat: string, uid : string) => {
+    const response = await axiosWithCredentials.get(`${POSTS_API}/${cat}/${uid}`);
     return response.data;
 };
 
 export const uploadImage = async (formData : any) => {
-    const response = await axiosWithCredentials.post(`${POSTS_API}/sends`, formData, {
+    const response = await axiosWithCredentials.post(`${POSTS_API}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

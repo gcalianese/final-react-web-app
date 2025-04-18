@@ -60,44 +60,30 @@ export default function Profile() {
         navigate("/Home");
     }
 
-    const fetchUserProfile = async () => {
+    const fetchInfo = async () => {
         if (hasCid) {
             const user = await accountClient.getUserById(cid as string);
             setUserProfile(user);
-        } else if (currentUser) {
-            const user = await accountClient.getUserById(currentUser._id as string);
-            setUserProfile(user);
-        }
-    }
-
-    const fetchUserFollowers = async () => {
-        if (hasCid) {
             const followers = await accountClient.getUsersFollowing(cid as string);
             setUserFollowers(followers);
             const following = await accountClient.getUsersFollowedBy(cid as string);
             setUserFollowing(following)
-        } else {
+            const posts = await postClient.getAllPostsBy(cid as string);
+            setUserPosts(posts);
+        } else if (currentUser) {
+            const user = await accountClient.getUserById(currentUser._id as string);
+            setUserProfile(user);
             const followers = await accountClient.getUsersFollowing(currentUser._id as string);
             setUserFollowers(followers);
             const following = await accountClient.getUsersFollowedBy(currentUser._id as string);
             setUserFollowing(following)
-        }
-    }
-
-    const fetchPosts = async () => {
-        if (hasCid) {
-            const posts = await postClient.getAllPostsBy(cid as string);
-            setUserPosts(posts);
-        } else {
-            const posts = await postClient.getAllPostsBy(currentUser._id as string);
+            const posts = await postClient.getAllPostsBy(currentUser._id);
             setUserPosts(posts);
         }
     }
 
     useEffect(() => {
-        fetchUserProfile();
-        fetchUserFollowers();
-        fetchPosts();
+        fetchInfo();
     }, [cid, currentUser]);
 
     return (

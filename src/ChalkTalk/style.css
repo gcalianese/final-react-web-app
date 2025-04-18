@@ -59,11 +59,11 @@ Spacing between nav bar icon and link
     text-align: center;
 }
 
-.ct-sends-container {
+.ct-posts-container {
     position: relative;
 }
 
-.add-send-button {
+.add-post-button {
     position: absolute;
     height: 400px;
     top: 10px;
@@ -78,7 +78,7 @@ Spacing between nav bar icon and link
     height: 50px;
 }
 
-.ct-sends-posts {
+.ct-posts-posts {
     background-color: rgb(222, 201, 220);
     text-align: center;
 }

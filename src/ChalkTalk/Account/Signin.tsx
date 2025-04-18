@@ -11,7 +11,6 @@ export default function Signin() {
     const dispatch = useDispatch();
     const signin = async () => {
         const user = await accountClient.signin(credentials)
-        console.log("given user: " + JSON.stringify(user))
         if (!user) return;
         dispatch(setCurrentUser(user));
         navigate("/Home");

@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import { Link } from "react-router";
+import { FaTrash } from "react-icons/fa";
 
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
@@ -73,6 +74,11 @@ export default function Sends() {
     }
   };
 
+  const handleDelete = async (pid : string) => {
+    await postClient.deletePost(pid);
+    fetchSends();
+  }
+
   return (
     <div className="ct-sends-container">
       <div className="header">
@@ -94,7 +100,9 @@ export default function Sends() {
           <div className="posts">
             {sends.map((send) => (
               <div key={send._id} className="border post">
+                <br />
                 {send.img && <img src={`${REMOTE_SERVER}/${send.img}`} width="400px" alt="Post" />}
+                <Button onClick={() => handleDelete(send._id)}><FaTrash /></Button>
                 <br />
                 <Link to={`/Account/Profile/${send.postedBy}`} key={send._id}>
                   {send.username}

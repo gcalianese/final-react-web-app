@@ -22,4 +22,10 @@ export const uploadImage = async (formData : any) => {
           "Content-Type": "multipart/form-data",
         },
       });
+    return response.data;
+}
+
+export const deletePost = async (pid : string) => {
+    const response = await axiosWithCredentials.delete(`${POSTS_API}/${pid}`);
+    return response.data;
 }

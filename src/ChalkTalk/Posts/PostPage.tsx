@@ -128,6 +128,7 @@ export default function PostPage({ cat }: { cat: string }) {
                         {posts.map((post) => (
                             <div key={post._id} className="border post">
                                 <br />
+                                Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
                                 {post.img && <img src={post.img} width="400px" alt="Post" />}
                                 {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
                                 <br />

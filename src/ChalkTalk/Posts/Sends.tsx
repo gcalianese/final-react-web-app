@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import { Link } from "react-router";
 import { FaTrash } from "react-icons/fa";
+import PostPreview from "./PostPreview";
 
 export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
 export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
@@ -42,6 +43,8 @@ export default function Sends() {
     }, [currentUser]);
 
     const [file, setFile] = useState<File | null>(null);
+    const [showPreview, setShowPreview] = useState(false);
+    const [previewURL, setPreviewURL] = useState<string>("");
 
     const handleAddPost = () => {
         if (currentUser) {
@@ -55,30 +58,38 @@ export default function Sends() {
         const selectedFile = event.target.files?.[0];
         if (selectedFile) {
             setFile(selectedFile);
-            console.log("Selected file:", selectedFile);
-            handleSubmit(selectedFile); // Automatically submit once file is selected, TODO: confirmation popup
+            const preview = URL.createObjectURL(selectedFile);
+            setPreviewURL(preview);
+            setShowPreview(true);
         }
     };
 
-    // Handle the image file upload
-    const handleSubmit = async (selectedFile: File) => {
 
+    const previewOnCancel = () => {
+        setPreviewURL("");
+        setFile(null);
+        setShowPreview(false);
+    }
+
+    // Handle the image file upload
+    const handlePostFromPreview = async (caption: string) => {
+        if (!file) return;
         const post = {
             postedBy: currentUser._id,
             category: "SENDS",
-            caption: "sent caption"
+            caption: caption
         };
 
         const formData = new FormData();
-        formData.append("image", selectedFile);
+        formData.append("image", file);
         formData.append("post", JSON.stringify(post));
-
 
         try {
             postClient.uploadImage(formData);
+            await fetchSends();
+            setShowPreview(false);
+            setFile(null);
             console.log("Image uploaded successfully");
-            alert("Image uploaded successfully!");
-            fetchSends();
         } catch (error) {
             console.error("Error uploading image:", error);
             alert("Failed to upload image. Please try again.");
@@ -125,12 +136,13 @@ export default function Sends() {
                 )}
             </div>
 
-            {/* TODO: Confrimation popup + verify it's an image file beffore uploading */}
+            {/* TODO: Verify it's an image file beffore uploading */}
             {file && (
                 <div>
                     <h4>File Selected: {file.name}</h4>
                 </div>
             )}
+            {showPreview && file && <PostPreview previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
         </div>
     );
 }

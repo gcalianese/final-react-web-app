@@ -39,7 +39,7 @@ Spacing between nav bar icon and link
 */
 .nav-link-text svg {
     margin-right: 3px;
-  }
+}
 
 .nav-link-container {
     text-decoration: none !important;
@@ -66,10 +66,11 @@ Spacing between nav bar icon and link
 .add-send-button {
     position: absolute;
     height: 400px;
-    top: 10px;  
-    right: 10px; 
-    border-radius: 50%; /* This will make the button round */
-    font-size: 18px; 
+    top: 10px;
+    right: 10px;
+    border-radius: 50%;
+    /* This will make the button round */
+    font-size: 18px;
 }
 
 .header {
@@ -80,4 +81,60 @@ Spacing between nav bar icon and link
 .ct-sends-posts {
     background-color: rgb(222, 201, 220);
     text-align: center;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.modal-content img {
+    border-radius: 8px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.modal-buttons button:hover {
+    background-color: #f0f0f0;
+}
+
+.ct-caption-textarea {
+    width: 100%;
+    min-width: 100px;
+    min-height: 40px;
+    resize: both;
+    max-width: 500px;
+    max-height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
 }

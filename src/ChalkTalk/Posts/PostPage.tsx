@@ -171,9 +171,10 @@ export default function PostPage({ cat }: { cat: string }) {
 
     const handleAddComment = async (pid: string) => {
         if (currentUser) {
-            const comment = { _id: uuidv4(), postedBy: currentUser._id, postId: pid, comment: "The Comment" }
+            const comment = { _id: uuidv4(), postedBy: currentUser._id, postId: pid, comment: "" }
             await commentClient.createComment(comment);
             fetchComments();
+            handleEditComment(comment as Comment);
         } else {
             setRestriction("comment on a post");
             setShowSigninPopup(true);

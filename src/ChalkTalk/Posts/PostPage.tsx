@@ -265,11 +265,12 @@ export default function PostPage({ cat }: { cat: string }) {
                                                 {currentUser && currentUser._id === comment.postedBy && comment._id === editCommentCid && (
                                                     <FormControl defaultValue={commentToEdit} onKeyDown={(e) => e.key === 'Enter' && handleEnterEditComment(comment)} onChange={(e) => setCommentToEdit(e.target.value)}></FormControl>
                                                 )}
+                                                {currentUser && currentUser._id === comment.postedBy &&
                                                 <Button variant="outline-secondary"
                                                     className="px-2 py-1" size="lg" onClick={() => handleEditComment(comment)}>
-                                                    {editCommentCid === comment._id && <FaPencil className="me-1" />}
+                                                    {editCommentCid !== comment._id && <FaPencil className="me-1" />}
                                                     {editCommentCid === comment._id ? "Done" : "Edit"}
-                                                </Button>
+                                                </Button>}
                                                 {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (
                                                     <Button variant="outline-danger" className="ms-2" onClick={() => handleDeleteComment(comment._id)}>
                                                         <FaTrash /> Delete

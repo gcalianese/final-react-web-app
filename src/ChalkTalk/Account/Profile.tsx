@@ -104,6 +104,11 @@ export default function Profile() {
         fetchInfo();
     }
 
+    const handleCancel = async () => {
+        fetchInfo();
+        setEdit(false);
+    }
+
     return (
         <div className="ct-profile-container">
             <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
@@ -152,6 +157,11 @@ export default function Profile() {
             {!hasCid && !edit && (
                 <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
                     Sign out
+                </Button>
+            )}
+                 {edit && (
+                <Button onClick={handleCancel} className="w-100 mb-2" id="wd-signout-btn">
+                    Cancel edits
                 </Button>
             )}
         </div>

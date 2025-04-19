@@ -53,29 +53,29 @@ export default function Users() {
                             <th>Last Name</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th></th> {/* Delete icon header */}
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {users.map((user) => (
                             <tr key={user._id}>
-                                <td onClick={() => navigate(`/Account/Profile/${user._id}`)}>
+                                <td onClick={() => navigate(`/Account/Profile/${user._id}`, { replace: false })}>
                                     {user.username}
                                 </td>
-                                <td onClick={() => navigate(`/Account/Profile/${user._id}`)}>
+                                <td onClick={() => navigate(`/Account/Profile/${user._id}`, { replace: false })}>
                                     {user.firstName}
                                 </td>
-                                <td onClick={() => navigate(`/Account/Profile/${user._id}`)}>
+                                <td onClick={() => navigate(`/Account/Profile/${user._id}`, { replace: false })}>
                                     {user.lastName}
                                 </td>
-                                <td onClick={() => navigate(`/Account/Profile/${user._id}`)}>
+                                <td onClick={() => navigate(`/Account/Profile/${user._id}`, { replace: false })}>
                                     {user.email}
                                 </td>
-                                <td onClick={() => navigate(`/Account/Profile/${user._id}`)}>
+                                <td onClick={() => navigate(`/Account/Profile/${user._id}`, { replace: false })}>
                                     {user.role}
                                 </td>
                                 <td>
-                                    <MdDeleteForever
+                                    {currentUser && currentUser._id !== user._id && <MdDeleteForever
                                         size={24}
                                         color="rgb(173, 0, 0)"
                                         style={{ cursor: "pointer" }}
@@ -83,7 +83,7 @@ export default function Users() {
                                             e.stopPropagation();
                                             handleDelete(user._id);
                                         }}
-                                    />
+                                    />}
                                 </td>
                             </tr>
                         ))}

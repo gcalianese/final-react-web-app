@@ -13,6 +13,17 @@ export const createComment = async (comment: any) => {
 // Get all comments for post
 export const getAllCommentsForPost = async (pid: string) => {
     const response = await axiosWithCredentials.get(`${COMMENTS_API}/${pid}`);
-    console.log("COMMENTS: " + JSON.stringify(response.data));
+    return response.data;
+};
+
+// Update a comment
+export const updateComment = async (updatedComment : any) => {
+    const response = await axiosWithCredentials.put(`${COMMENTS_API}/update`, updatedComment);
+    return response.data;
+};
+
+// Get all comments for post
+export const deleteComment = async (cid: string) => {
+    const response = await axiosWithCredentials.delete(`${COMMENTS_API}/${cid}`);
     return response.data;
 };

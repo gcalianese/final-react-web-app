@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
+import * as likeClient from "./likesClient"
 import { Link, Navigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import PostPreview from "./PostPreview";
@@ -39,8 +40,15 @@ export default function PostPage({ cat }: { cat: string }) {
         updatedAt: Date;
     };
 
+    type Like = {
+        _id: string,
+        postId: string,
+        likedBy: string
+    }
+
     const [posts, setPosts] = useState<Post[]>([]);
     const [comments, setComments] = useState<Comment[]>([]);
+    const [likes, setLikes] = useState<Like[]>([]);
 
     // Fetch posts for user if logged in or all posts if not
     const fetchPosts = async () => {
@@ -61,6 +69,11 @@ export default function PostPage({ cat }: { cat: string }) {
         setComments(allComments.flat());
     };
 
+    const fetchLikes = async () => {
+        const likes = await likeClient.getAllLikes();
+        setLikes(likes);
+    }
+
     useEffect(() => {
         fetchPosts();
     }, [currentUser, cat]);
@@ -68,6 +81,7 @@ export default function PostPage({ cat }: { cat: string }) {
     useEffect(() => {
         if (posts.length > 0) {
             fetchComments();
+            fetchLikes();
         }
     }, [posts]);
 
@@ -76,12 +90,14 @@ export default function PostPage({ cat }: { cat: string }) {
     const [previewURL, setPreviewURL] = useState<string>("");
     const [showSigninPopup, setShowSigninPopup] = useState(false);
     const [redirectToSignin, setRedirectToSignin] = useState(false);
+    const [restriction, setRestriction] = useState("");
 
     const handleAddPost = () => {
         if (currentUser) {
             const fileInput = document.getElementById("fileInput") as HTMLInputElement;
             fileInput?.click();
         } else {
+            setRestriction("post in the " + cat + " thread");
             setShowSigninPopup(true);
         }
     };
@@ -134,14 +150,38 @@ export default function PostPage({ cat }: { cat: string }) {
         fetchPosts();
     }
 
-    const createComment = async (pid: string) => {
-        const comment = { _id: uuidv4(), postedBy: "234", postId: pid, comment: "I liked the old ones better!" }
-        const newComment = await commentClient.createComment(comment);
-    }
-
     const getCommentsForPost = (postId: string) => {
         return comments.filter(comment => comment.postId === postId);
     };
+
+    const handleLike = async (pid: string) => {
+        if (currentUser) {
+            const like = { _id: uuidv4(), postId: pid, likedBy: currentUser._id };
+            await likeClient.createLike(like);
+            fetchLikes();
+        } else {
+            setRestriction("like a post");
+            setShowSigninPopup(true);
+        }
+    }
+
+    const handleAddComment = async (pid: string) => {
+        if (currentUser) {
+            const comment = { _id: uuidv4(), postedBy: currentUser._id, postId: pid, comment: "The Comment" }
+            await commentClient.createComment(comment);
+            fetchComments();
+        } else {
+            setRestriction("comment on a post");
+            setShowSigninPopup(true);
+        }
+    }
+
+    const handleDeleteComment = async (cid: string) => {
+        if (currentUser) {
+            await commentClient.deleteComment(cid);
+            fetchComments();
+        }
+    }
 
     return (
         <div className="ct-posts-container">
@@ -178,9 +218,10 @@ export default function PostPage({ cat }: { cat: string }) {
                                             <br />
                                             {post.img && <img src={post.img} width="400px" alt="Post" />}<br />
                                             <span>
-                                                <Button><AiOutlineLike /> Like</Button>
-                                                <Button><FaRegComment onClick={() => createComment(post._id)} /> Comment</Button>
+                                                <Button onClick={() => handleLike(post._id)}><AiOutlineLike /> Like</Button>
+                                                <Button onClick={() => handleAddComment(post._id)}><FaRegComment /> Comment</Button>
                                                 {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete}><FaTrash /></Button></>}
+                                                Likes: {likes.filter((like) => like.postId === post._id).length}
                                             </span>
                                             <br />
                                             <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>: <label>{post.caption}</label>
@@ -201,7 +242,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                     </Button>
                                                 )}
                                                 {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (
-                                                    <Button variant="outline-danger" size="sm" className="ms-2">
+                                                    <Button variant="outline-danger" size="sm" className="ms-2" onClick={() => handleDeleteComment(comment._id)}>
                                                         <FaTrash /> Delete
                                                     </Button>
                                                 )}
@@ -226,7 +267,7 @@ export default function PostPage({ cat }: { cat: string }) {
             {showPreview && file && <PostPreview previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
             {showSigninPopup && (
                 <Popup
-                    restriction={"post in the " + cat + " thread"}
+                    restriction={restriction}
                     onClose={() => setShowSigninPopup(false)}
                     onSignIn={() => {
                         setShowSigninPopup(false);

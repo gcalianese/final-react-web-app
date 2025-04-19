@@ -162,15 +162,14 @@ export default function PostPage({ cat }: { cat: string }) {
                         {posts.map((post) => (
                             <div key={post._id} className="border post">
                                 <br />
-                                Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
                                 {post.img && <img src={post.img} width="400px" alt="Post" />}
                                 {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
                                 <Button><FaRegComment onClick={() => createComment(post._id)} /></Button>
                                 <br />
-                                <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}>
-                                    {post.username}
-                                </Link>
-                                <label>{post.caption}</label>
+                                <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>: <label>{post.caption}</label>
+                                <label style={{ color: "#666666"}}>
+                                    Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
+                                </label>
                                 {getCommentsForPost(post._id).map((comment) => (
                                     <p key={comment._id}><Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}</p>
                                 ))}

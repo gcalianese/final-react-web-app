@@ -13,6 +13,7 @@ import { FaRegComment } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineLike } from "react-icons/ai";
 import { FaPencil } from "react-icons/fa6";
+import { FormControl } from "react-bootstrap";
 
 
 export default function PostPage({ cat }: { cat: string }) {
@@ -91,6 +92,9 @@ export default function PostPage({ cat }: { cat: string }) {
     const [showSigninPopup, setShowSigninPopup] = useState(false);
     const [redirectToSignin, setRedirectToSignin] = useState(false);
     const [restriction, setRestriction] = useState("");
+    const [editCommentCid, setEditCommentCid] = useState("");
+    const [commentToEdit, setCommentToEdit] = useState("");
+    const [editCaption, setEditCaption] = useState(false);
 
     const handleAddPost = () => {
         if (currentUser) {
@@ -176,6 +180,19 @@ export default function PostPage({ cat }: { cat: string }) {
         }
     }
 
+    const handleEditComment = async (comment: Comment) => {
+        setEditCommentCid(comment._id);
+        setCommentToEdit(comment.comment);
+    }
+
+    const handleEnterEditComment = async (comment: Comment) => {
+        const updatedComment = { ...comment, comment: commentToEdit }
+        await commentClient.updateComment(updatedComment);
+        setEditCommentCid("");
+        setCommentToEdit("");
+        fetchComments();
+    }
+
     const handleDeleteComment = async (cid: string) => {
         if (currentUser) {
             await commentClient.deleteComment(cid);
@@ -220,7 +237,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                             <span>
                                                 <Button onClick={() => handleLike(post._id)}><AiOutlineLike /> Like</Button>
                                                 <Button onClick={() => handleAddComment(post._id)}><FaRegComment /> Comment</Button>
-                                                {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete}><FaTrash /></Button></>}
+                                                {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete} size="lg"><FaTrash /></Button></>}
                                                 Likes: {likes.filter((like) => like.postId === post._id).length}
                                             </span>
                                             <br />
@@ -234,15 +251,18 @@ export default function PostPage({ cat }: { cat: string }) {
                                         {getCommentsForPost(post._id).map((comment) => (
                                             <div key={comment._id}>
                                                 <label>
-                                                    <Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}
+                                                    <Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment._id !== editCommentCid ? comment.comment : null}
                                                 </label>
-                                                {currentUser && currentUser._id === comment.postedBy && (
-                                                    <Button variant="outline-secondary" size="sm">
-                                                        <FaPencil /> Edit
-                                                    </Button>
+                                                {currentUser && currentUser._id === comment.postedBy && comment._id === editCommentCid && (
+                                                    <FormControl defaultValue={commentToEdit} onKeyDown={(e) => e.key === 'Enter' && handleEnterEditComment(comment)} onChange={(e) => setCommentToEdit(e.target.value)}></FormControl>
                                                 )}
+                                                <Button variant="outline-secondary"
+                                                    className="px-2 py-1" size="lg" onClick={() => handleEditComment(comment)}>
+                                                    {editCommentCid === comment._id  && <FaPencil className="me-1" />}
+                                                    {editCommentCid === comment._id ? "Done" : "Edit"}
+                                                </Button>
                                                 {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (
-                                                    <Button variant="outline-danger" size="sm" className="ms-2" onClick={() => handleDeleteComment(comment._id)}>
+                                                    <Button variant="outline-danger" className="ms-2" onClick={() => handleDeleteComment(comment._id)}>
                                                         <FaTrash /> Delete
                                                     </Button>
                                                 )}

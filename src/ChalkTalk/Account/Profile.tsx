@@ -5,8 +5,10 @@ import * as accountClient from "./client"
 import * as accountReducer from "./reducer"
 import * as postClient from "../Posts/client"
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Button } from "react-bootstrap";
+import { Button, FormControl } from "react-bootstrap";
 import { Link } from "react-router";
+import { FaPencil } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa";
 
 type User = {
     _id: string;
@@ -24,6 +26,11 @@ type User = {
     followingCount: string;
     postCount: string;
 };
+
+export enum UserType {
+    ADMIN = "ADMIN",
+    USER = "USER"
+}
 
 const defaultUser: User = {
     _id: "defaultId",
@@ -52,7 +59,9 @@ export default function Profile() {
     const [userProfile, setUserProfile] = useState<User>(defaultUser);
     const [userFollowers, setUserFollowers] = useState<User[]>([]);
     const [userFollowing, setUserFollowing] = useState<User[]>([]);
-    const [userPosts, setUserPosts]  = useState<User[]>([]);
+    const [userPosts, setUserPosts] = useState<User[]>([]);
+    const [edit, setEdit] = useState(false);
+    const [editedUser, setEditedUser] = useState<User>(defaultUser);
 
     const signout = async () => {
         await accountClient.signout();
@@ -62,8 +71,12 @@ export default function Profile() {
 
     const fetchInfo = async () => {
         if (hasCid) {
+            if (currentUser && currentUser._id === cid) {
+                navigate("/Account/Profile");
+            }
             const user = await accountClient.getUserById(cid as string);
             setUserProfile(user);
+            setEditedUser(user);
             const followers = await accountClient.getUsersFollowing(cid as string);
             setUserFollowers(followers);
             const following = await accountClient.getUsersFollowedBy(cid as string);
@@ -73,6 +86,7 @@ export default function Profile() {
         } else if (currentUser) {
             const user = await accountClient.getUserById(currentUser._id as string);
             setUserProfile(user);
+            setEditedUser(user);
             const followers = await accountClient.getUsersFollowing(currentUser._id as string);
             setUserFollowers(followers);
             const following = await accountClient.getUsersFollowedBy(currentUser._id as string);
@@ -86,26 +100,42 @@ export default function Profile() {
         fetchInfo();
     }, [cid, currentUser]);
 
+    const handleEnter = async () => {
+        await accountClient.updateUser(editedUser);
+        setEdit(false);
+        fetchInfo();
+    }
+
     return (
         <div className="ct-profile-container">
-            <h1><FaRegCircleUser /> {userProfile.username}</h1>
-            First Name: {userProfile.firstName}<br />
-            Last Name: {userProfile.lastName}<br />
-            Username: {userProfile.username}<br />
+            <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || currentUser.role === "ADMIN") && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
+            First Name: {!edit && <>{userProfile.firstName}</>}
+            {edit && <><FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} /></>}<br />
+            {currentUser && <> Last Name:
+                {!edit && <>{userProfile.lastName}</>}
+                {edit && <><FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} /></>}
+                <br /></>}
+            Username: {!edit && userProfile.username} {edit && <><FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></>}
+            <br />
             {!hasCid && (
                 <>
-                    Password: {userProfile.password}<br />
+                    Password: {!edit && userProfile.password}{edit && <><FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} /></>}<br />
                 </>
             )}
-            Role: {userProfile.role}<br />
-            {!hasCid && (
+            {currentUser && <> Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}{currentUser.role === "ADMIN" && edit && <> <select value={editedUser.role} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
+                className="form-select float-start w-25 wd-select-role" >
+                <option value="ADMIN">ADMIN</option>
+                <option value="USER">USER</option>
+            </select> </>}
+                <br /> </>}
+            {(!hasCid || currentUser.role === "ADMIN") && (
                 <>
-                    Email: {userProfile.email}<br />
-                    Phone Number: {userProfile.phoneNumber}<br />
-                    Birthday: {new Date(userProfile.dob).toLocaleDateString()}<br />
+                    Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br />
+                    Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />
+                    Birthday: {!edit ? new Date(userProfile.dob).toLocaleDateString("en-US") : <FormControl type="date" defaultValue={editedUser.dob ? (editedUser.dob instanceof Date ? editedUser.dob.toISOString().slice(0, 10) : editedUser.dob) : ''} onChange={(e) => setEditedUser({ ...editedUser, dob: new Date(e.target.value) })} className="mb-2 w-25" />}<br />
                 </>
             )}
-            Home Gym: {userProfile.homeGym}<br />
+            {currentUser && <> Home Gym: {!edit && userProfile.homeGym}{edit && <><FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} /> </>}<br /></>}
             Followers: {userFollowers.length}<br />
             {userFollowers.map((follower) => (
                 <Link to={`/Account/Profile/${follower._id}`} key={`followedby-` + follower._id}>

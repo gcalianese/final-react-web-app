@@ -45,3 +45,9 @@ export const createUser = async (user : any) => {
     const response = await axiosWithCredentials.post(`${USERS_API}`, user);
     return response.data;
 };
+
+// update a user
+export const updateUser = async (user : any) => {
+    const response = await axiosWithCredentials.put(`${USERS_API}`, user);
+    return response.data;
+};

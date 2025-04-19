@@ -9,6 +9,7 @@ import { Button, FormControl } from "react-bootstrap";
 import { Link } from "react-router";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
+import "./profileStyle.css";
 
 type User = {
     _id: string;

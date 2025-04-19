@@ -1,0 +1,80 @@
+.ct-profile-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 16px;
+    background-color: #f8f8f8;
+    color: #2c2c2c;
+    box-shadow: 0 0 12px rgba(130, 170, 255, 0.2);
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+}
+
+.ct-profile-container h1 {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #6c63ff;
+}
+
+.ct-profile-container svg {
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    color: #6c63ff;
+}
+
+.ct-profile-container svg:hover {
+    transform: scale(1.1);
+    color: #9378ff;
+}
+
+.ct-profile-container .form-control,
+.ct-profile-container .form-select {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    color: #2c2c2c;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.ct-profile-container .form-control:focus,
+.ct-profile-container .form-select:focus {
+    border-color: #7f5af0;
+    box-shadow: 0 0 0 0.2rem rgba(127, 90, 240, 0.25);
+    background-color: #f0f0ff;
+}
+
+.ct-profile-container a {
+    color: #7f5af0;
+    text-decoration: none;
+}
+
+.ct-profile-container a:hover {
+    text-decoration: underline;
+    color: #6246ea;
+}
+
+#wd-signout-btn {
+    background-color: #7f5af0;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+#wd-signout-btn:hover {
+    background-color: #6246ea;
+}
+
+.wd-select-role {
+    background-color: #ffffff;
+    color: #2c2c2c;
+    border: 1px solid #bbb;
+    padding: 8px;
+    border-radius: 6px;
+}

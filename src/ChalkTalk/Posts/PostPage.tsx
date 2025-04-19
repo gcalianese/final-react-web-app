@@ -10,6 +10,9 @@ import PostPreview from "./PostPreview";
 import Popup from "../Account/Popup";
 import { FaRegComment } from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
+import { AiOutlineLike } from "react-icons/ai";
+import { FaPencil } from "react-icons/fa6";
+
 
 export default function PostPage({ cat }: { cat: string }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -173,9 +176,12 @@ export default function PostPage({ cat }: { cat: string }) {
                                     <td className="ct-post-cell">
                                         <div key={post._id} className="border post">
                                             <br />
-                                            {post.img && <img src={post.img} width="400px" alt="Post" />}
-                                            {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
-                                            <Button><FaRegComment onClick={() => createComment(post._id)} /></Button>
+                                            {post.img && <img src={post.img} width="400px" alt="Post" />}<br />
+                                            <span>
+                                                <Button><AiOutlineLike /> Like</Button>
+                                                <Button><FaRegComment onClick={() => createComment(post._id)} /> Comment</Button>
+                                                {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete}><FaTrash /></Button></>}
+                                            </span>
                                             <br />
                                             <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>: <label>{post.caption}</label>
                                             <label style={{ color: "#666666" }}>
@@ -185,15 +191,28 @@ export default function PostPage({ cat }: { cat: string }) {
                                     </td>
                                     <td className="ct-comment-cell">
                                         {getCommentsForPost(post._id).map((comment) => (
-                                            <p key={comment._id}><Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}</p>
+                                            <div key={comment._id}>
+                                                <label>
+                                                    <Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}
+                                                </label>
+                                                {currentUser && currentUser._id === comment.postedBy && (
+                                                    <Button variant="outline-secondary" size="sm">
+                                                        <FaPencil /> Edit
+                                                    </Button>
+                                                )}
+                                                {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (
+                                                    <Button variant="outline-danger" size="sm" className="ms-2">
+                                                        <FaTrash /> Delete
+                                                    </Button>
+                                                )}
+                                            </div>
                                         ))}
-
                                     </td>
                                 </tr>
                             ))}
                             </>
                         )}
-                       
+
                     </tbody>
                 </table>
             </div>

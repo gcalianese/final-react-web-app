@@ -18,8 +18,7 @@ type User = {
     email: string;
     phoneNumber: string;
     lastName: string;
-    dob: Date;
-    role: "ADMIN" | "USER";
+    role: "ADMIN" | "MOD" | "USER";
     loginId: string;
     homeGym: string;
     followerCount: string;
@@ -40,7 +39,6 @@ const defaultUser: User = {
     email: "defaultEmail",
     phoneNumber: "defaultPhoneNumber",
     lastName: "defaultLastName",
-    dob: new Date(),
     role: "USER",
     loginId: "defaultLoginId",
     homeGym: "defaultHomeGym",
@@ -125,6 +123,7 @@ export default function Profile() {
             {currentUser && <> Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}{currentUser.role === "ADMIN" && edit && <> <select value={editedUser.role} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
                 className="form-select float-start w-25 wd-select-role" >
                 <option value="ADMIN">ADMIN</option>
+                <option value="MOD">MOD</option>
                 <option value="USER">USER</option>
             </select> </>}
                 <br /> </>}
@@ -132,7 +131,6 @@ export default function Profile() {
                 <>
                     Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br />
                     Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />
-                    Birthday: {!edit ? new Date(userProfile.dob).toLocaleDateString("en-US") : <FormControl type="date" defaultValue={editedUser.dob ? (editedUser.dob instanceof Date ? editedUser.dob.toISOString().slice(0, 10) : editedUser.dob) : ''} onChange={(e) => setEditedUser({ ...editedUser, dob: new Date(e.target.value) })} className="mb-2 w-25" />}<br />
                 </>
             )}
             {currentUser && <> Home Gym: {!edit && userProfile.homeGym}{edit && <><FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} /> </>}<br /></>}

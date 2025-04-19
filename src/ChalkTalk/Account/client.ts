@@ -39,3 +39,9 @@ export const profile = async () => {
     const response = await axiosWithCredentials.post(`${USERS_API}/profile`);
     return response.data;
 };
+
+// Create a new USER with the given username, password, first name, and last name
+export const createUser = async (user : any) => {
+    const response = await axiosWithCredentials.post(`${USERS_API}`, user);
+    return response.data;
+};

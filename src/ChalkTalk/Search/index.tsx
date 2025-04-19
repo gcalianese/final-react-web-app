@@ -35,7 +35,7 @@ export default function Search() {
             <h1>Find Gyms Near You</h1>
             <div className="p-3">
                 <FormControl className="ct-zipcode-input"
-                    placeholder="Zipcode"
+                    placeholder="Zipcode, eg. 02115"
                     //defaultValue={zip}
                     value={zip}  // Make it a controlled input
                     onChange={(e) => {

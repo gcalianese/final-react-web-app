@@ -160,13 +160,27 @@ export default function PostPage({ cat }: { cat: string }) {
 
     const handleLike = async (pid: string) => {
         if (currentUser) {
-            const like = { _id: uuidv4(), postId: pid, likedBy: currentUser._id };
-            await likeClient.createLike(like);
-            fetchLikes();
+            if (!liked(pid, currentUser._id)) {
+                const like = { _id: uuidv4(), postId: pid, likedBy: currentUser._id };
+                await likeClient.createLike(like);
+                fetchLikes();
+            } else {
+                await handleUnlike(pid, currentUser._id);
+            }
         } else {
             setRestriction("like a post");
             setShowSigninPopup(true);
         }
+    }
+
+    const handleUnlike = async (pid: string, uid: string) => {
+        await likeClient.unlike(pid, uid);
+        fetchLikes();
+    }
+
+    const liked = (pid: string, uid: string) => {
+        const num = likes.filter(like => like.likedBy === uid && like.postId === pid).length;
+        return num !== 0;
     }
 
     const handleAddComment = async (pid: string) => {
@@ -244,7 +258,12 @@ export default function PostPage({ cat }: { cat: string }) {
                                             <br />
                                             {post.img && <img src={post.img} width="400px" alt="Post" />}<br />
                                             <span>
-                                                <Button onClick={() => handleLike(post._id)}><AiOutlineLike /> Like</Button>
+                                                <Button
+                                                    style={{ backgroundColor: currentUser && liked(post._id, currentUser._id) ? "rgb(164, 102, 182)" : "" }}
+                                                    onClick={() => handleLike(post._id)}
+                                                >
+                                                    <AiOutlineLike /> Like
+                                                </Button>
                                                 <Button onClick={() => handleAddComment(post._id)}><FaRegComment /> Comment</Button>
                                                 {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete} size="lg"><FaTrash /></Button></>}
                                                 Likes: {likes.filter((like) => like.postId === post._id).length}
@@ -266,11 +285,11 @@ export default function PostPage({ cat }: { cat: string }) {
                                                     <FormControl defaultValue={commentToEdit} onKeyDown={(e) => e.key === 'Enter' && handleEnterEditComment(comment)} onChange={(e) => setCommentToEdit(e.target.value)}></FormControl>
                                                 )}
                                                 {currentUser && currentUser._id === comment.postedBy &&
-                                                <Button variant="outline-secondary"
-                                                    className="px-2 py-1" size="lg" onClick={() => handleEditComment(comment)}>
-                                                    {editCommentCid !== comment._id && <FaPencil className="me-1" />}
-                                                    {editCommentCid === comment._id ? "Done" : "Edit"}
-                                                </Button>}
+                                                    <Button variant="outline-secondary"
+                                                        className="px-2 py-1" size="lg" onClick={() => handleEditComment(comment)}>
+                                                        {editCommentCid !== comment._id && <FaPencil className="me-1" />}
+                                                        {editCommentCid === comment._id ? "Done" : "Edit"}
+                                                    </Button>}
                                                 {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (
                                                     <Button variant="outline-danger" className="ms-2" onClick={() => handleDeleteComment(comment._id)}>
                                                         <FaTrash /> Delete

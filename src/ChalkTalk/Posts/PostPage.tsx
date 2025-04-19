@@ -181,8 +181,16 @@ export default function PostPage({ cat }: { cat: string }) {
     }
 
     const handleEditComment = async (comment: Comment) => {
-        setEditCommentCid(comment._id);
-        setCommentToEdit(comment.comment);
+        if (editCommentCid) {
+            const updatedComment = { ...comment, comment: commentToEdit }
+            await commentClient.updateComment(updatedComment);
+            setEditCommentCid("");
+            setCommentToEdit("");
+            fetchComments();
+        } else {
+            setEditCommentCid(comment._id);
+            setCommentToEdit(comment.comment);
+        }
     }
 
     const handleEnterEditComment = async (comment: Comment) => {
@@ -258,7 +266,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                 )}
                                                 <Button variant="outline-secondary"
                                                     className="px-2 py-1" size="lg" onClick={() => handleEditComment(comment)}>
-                                                    {editCommentCid === comment._id  && <FaPencil className="me-1" />}
+                                                    {editCommentCid === comment._id && <FaPencil className="me-1" />}
                                                     {editCommentCid === comment._id ? "Done" : "Edit"}
                                                 </Button>
                                                 {currentUser && (currentUser._id === comment.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && (

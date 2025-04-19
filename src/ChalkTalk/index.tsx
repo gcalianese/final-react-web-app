@@ -5,6 +5,7 @@ import Session from "./Account/Session";
 import Posts from "./Posts";
 import Home from "./Home";
 import Search from "./Search";
+import Users from "./Users";
 
 export default function ChalkTalk() {
     return (
@@ -17,6 +18,7 @@ export default function ChalkTalk() {
                         <Route path="/Home/*" element={<Home />} />
                         <Route path="/Posts/*" element={<Posts />} />
                         <Route path="/Search/*" element={<Search />} />
+                        <Route path="/Users/*" element={<Users />} />
                     </Routes>
                 </div>
             </div>

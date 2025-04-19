@@ -51,3 +51,15 @@ export const updateUser = async (user : any) => {
     const response = await axiosWithCredentials.put(`${USERS_API}`, user);
     return response.data;
 };
+
+// get all users
+export const getAllUsers = async () => {
+    const response = await axiosWithCredentials.get(`${USERS_API}`);
+    return response.data;
+}
+
+// delete user with given uid
+export const deleteUser = async (uid : string) => {
+    const response = await axiosWithCredentials.delete(`${USERS_API}/${uid}`);
+    return response.data;
+}

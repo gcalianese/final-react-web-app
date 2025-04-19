@@ -109,9 +109,7 @@ export default function Profile() {
             <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
             First Name: {!edit && <>{userProfile.firstName}</>}
             {edit && <><FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} /></>}<br />
-            {currentUser && <> Last Name:
-                {!edit && <>{userProfile.lastName}</>}
-                {edit && <><FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} /></>}
+            {currentUser && <> Last Name: {!edit && <>{userProfile.lastName}</>}{edit && <><FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} /></>}
                 <br /></>}
             Username: {!edit && userProfile.username} {edit && <><FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></>}
             <br />
@@ -123,7 +121,7 @@ export default function Profile() {
             {currentUser && <>
                 Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}
                 {currentUser.role === "ADMIN" && edit && (
-                    <select value={editedUser.role} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
+                    <select value={editedUser.role} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
                         className="form-select float-start w-25 wd-select-role">
                         <option value="ADMIN">ADMIN</option>
                         <option value="MOD">MOD</option>
@@ -132,10 +130,9 @@ export default function Profile() {
                 )}
                 <br />
             </>}
+            {currentUser && <>Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br /></>}
             {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
-                <>
-                    Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br />
-                    Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />
+                <>                    Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />
                 </>
             )}
             {currentUser && <> Home Gym: {!edit && userProfile.homeGym}{edit && <><FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} /> </>}<br /></>}
@@ -152,7 +149,7 @@ export default function Profile() {
                 </Link>
             ))}
             Posts: {userPosts.length}<br />
-            {!hasCid && (
+            {!hasCid && !edit && (
                 <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
                     Sign out
                 </Button>

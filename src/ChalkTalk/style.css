@@ -34,9 +34,7 @@ body * {
     padding: 5px;
 }
 
-/*
-Spacing between nav bar icon and link
-*/
+/* Spacing between nav bar icon and link */
 .nav-link-text svg {
     margin-right: 3px;
     color: rgb(112, 182, 243)
@@ -68,7 +66,6 @@ Spacing between nav bar icon and link
     top: 10px;
     right: 10px;
     border-radius: 50%;
-    /* This will make the button round */
     font-size: 18px;
 }
 
@@ -196,4 +193,52 @@ Spacing between nav bar icon and link
 .ct-logo {
     font-size: 50px;
     color: rgb(112, 182, 243)
+}
+
+.table-container {
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(90, 17, 114, 0.2);
+    margin: 0 auto;
+    font-size: 16px;
+}
+
+.user-table thead {
+    background-color: rgb(90, 17, 114);
+    color: rgb(112, 182, 243);
+    font-weight: bold;
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgb(222, 201, 220);
+}
+
+@media (max-width: 768px) {
+    .user-table {
+        font-size: 14px;
+    }
+
+    .user-table th,
+    .user-table td {
+        padding: 8px;
+    }
+
+    /* Hide nav bar on small screens */
+    .nav-bar {
+        display: none;
+    }
+
+    .ct-main-content-offset {
+        padding-left: 0 !important;
+    }
 }

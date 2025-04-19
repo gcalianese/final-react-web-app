@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
+import * as commentClient from "../Comments/client";
 import { Link, Navigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import PostPreview from "./PostPreview";
 import Popup from "../Account/Popup";
-
-export const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
-export const POSTS_API = `${REMOTE_SERVER}/api/posts`;
+import { FaRegComment } from "react-icons/fa";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function PostPage({ cat }: { cat: string }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -26,7 +26,18 @@ export default function PostPage({ cat }: { cat: string }) {
         updatedAt: Date;
     };
 
+    type Comment = {
+        _id: string;
+        postedBy: string;
+        username: string;
+        postId: string;
+        comment: string;
+        createdAt: Date;
+        updatedAt: Date;
+    };
+
     const [posts, setPosts] = useState<Post[]>([]);
+    const [comments, setComments] = useState<Comment[]>([]);
 
     // Fetch posts for user if logged in or all posts if not
     const fetchPosts = async () => {
@@ -39,9 +50,23 @@ export default function PostPage({ cat }: { cat: string }) {
         }
     };
 
+    // Fetch comments for the retreived posts
+    const fetchComments = async () => {
+        const allComments = await Promise.all(
+            posts.map((post) => commentClient.getAllCommentsForPost(post._id))
+        );
+        setComments(allComments.flat());
+    };
+
     useEffect(() => {
         fetchPosts();
     }, [currentUser, cat]);
+
+    useEffect(() => {
+        if (posts.length > 0) {
+            fetchComments();
+        }
+    }, [posts]);
 
     const [file, setFile] = useState<File | null>(null);
     const [showPreview, setShowPreview] = useState(false);
@@ -106,6 +131,15 @@ export default function PostPage({ cat }: { cat: string }) {
         fetchPosts();
     }
 
+    const createComment = async (pid: string) => {
+        const comment = { _id: uuidv4(), postedBy: "234", postId: pid, comment: "I liked the old ones better!" }
+        const newComment = await commentClient.createComment(comment);
+    }
+
+    const getCommentsForPost = (postId: string) => {
+        return comments.filter(comment => comment.postId === postId);
+    };
+
     return (
         <div className="ct-posts-container">
             <div className="header">
@@ -131,11 +165,16 @@ export default function PostPage({ cat }: { cat: string }) {
                                 Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
                                 {post.img && <img src={post.img} width="400px" alt="Post" />}
                                 {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
+                                <Button><FaRegComment onClick={() => createComment(post._id)} /></Button>
                                 <br />
                                 <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}>
                                     {post.username}
                                 </Link>
                                 <label>{post.caption}</label>
+                                {getCommentsForPost(post._id).map((comment) => (
+                                    <p key={comment._id}><Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}</p>
+                                ))}
+
                             </div>
                         ))}
                     </div>

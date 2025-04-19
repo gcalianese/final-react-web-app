@@ -157,27 +157,45 @@ export default function PostPage({ cat }: { cat: string }) {
                 onChange={handleFileChange}
             />
             <div className="ct-posts-posts d-flex justify-content-center">
-                {posts && (
-                    <div className="posts">
-                        {posts.map((post) => (
-                            <div key={post._id} className="border post">
-                                <br />
-                                {post.img && <img src={post.img} width="400px" alt="Post" />}
-                                {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
-                                <Button><FaRegComment onClick={() => createComment(post._id)} /></Button>
-                                <br />
-                                <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>: <label>{post.caption}</label>
-                                <label style={{ color: "#666666"}}>
-                                    Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
-                                </label>
-                                {getCommentsForPost(post._id).map((comment) => (
-                                    <p key={comment._id}><Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}</p>
-                                ))}
+                <table className="responsive-table">
+                    <thead>
+                        <tr>
+                            <th className="posts-header">Posts</th>
+                            <th className="comments-header">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                            </div>
-                        ))}
-                    </div>
-                )}
+                        {posts && (
+
+                            <>                             {posts.map((post) => (
+                                <tr>
+                                    <td className="ct-post-cell">
+                                        <div key={post._id} className="border post">
+                                            <br />
+                                            {post.img && <img src={post.img} width="400px" alt="Post" />}
+                                            {currentUser && (currentUser.role === "ADMIN" || post.postedBy === currentUser._id) && (<Button onClick={() => handleDelete(post._id)}><FaTrash /></Button>)}
+                                            <Button><FaRegComment onClick={() => createComment(post._id)} /></Button>
+                                            <br />
+                                            <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>: <label>{post.caption}</label>
+                                            <label style={{ color: "#666666" }}>
+                                                Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td className="ct-comment-cell">
+                                        {getCommentsForPost(post._id).map((comment) => (
+                                            <p key={comment._id}><Link to={`/Account/Profile/${comment.postedBy}`}>{comment.username}</Link>: {comment.comment}</p>
+                                        ))}
+
+                                    </td>
+                                </tr>
+                            ))}
+                            </>
+                        )}
+                       
+                    </tbody>
+                </table>
             </div>
 
             {/* TODO: Verify it's an image file before uploading */}

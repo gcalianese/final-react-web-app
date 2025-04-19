@@ -106,7 +106,7 @@ export default function Profile() {
 
     return (
         <div className="ct-profile-container">
-            <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || currentUser.role === "ADMIN") && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
+            <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
             First Name: {!edit && <>{userProfile.firstName}</>}
             {edit && <><FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} /></>}<br />
             {currentUser && <> Last Name:
@@ -120,14 +120,19 @@ export default function Profile() {
                     Password: {!edit && userProfile.password}{edit && <><FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} /></>}<br />
                 </>
             )}
-            {currentUser && <> Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}{currentUser.role === "ADMIN" && edit && <> <select value={editedUser.role} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
-                className="form-select float-start w-25 wd-select-role" >
-                <option value="ADMIN">ADMIN</option>
-                <option value="MOD">MOD</option>
-                <option value="USER">USER</option>
-            </select> </>}
-                <br /> </>}
-            {(!hasCid || currentUser.role === "ADMIN") && (
+            {currentUser && <>
+                Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}
+                {currentUser.role === "ADMIN" && edit && (
+                    <select value={editedUser.role} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
+                        className="form-select float-start w-25 wd-select-role">
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="MOD">MOD</option>
+                        <option value="USER">USER</option>
+                    </select>
+                )}
+                <br />
+            </>}
+            {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
                 <>
                     Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br />
                     Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />

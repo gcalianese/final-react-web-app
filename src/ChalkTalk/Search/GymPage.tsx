@@ -32,11 +32,29 @@ export default function GymPage() {
 
     return (
         <div id="ct-search-page">
-            <h1>Welcome to gym page </h1>
-            {gym != null ? 
-            <div> Gym Id: {gym!.id} </div>
-            :
-            <div> Gym not found </div>}
+            {gym == null ?
+                <div>
+                    <h1> Uh oh, gym page not found! </h1>
+                    <div>
+                        <span>
+                            It looks like the gym page you were looking for does not exist. <br />
+                            Please try searching again!
+                        </span>
+                    </div>
+                </div>
+                :
+                <div>
+                    <h1> Details for {gym.name} </h1>
+                    Gym Id: {gym.id} <br />
+                    Gym coordinates: {gym.lon} (lon) x {gym.lat} (lat) <br />
+                    Gym address: {gym.address.house} {gym.address.street} {gym.address.city} {gym.address.postcode} <br />
+                    Gym website: {gym.website} <br />
+                    <iframe
+                        src={gym.website}
+                        width="80%"
+                        height="550px"
+                    />
+                </div>}
         </div>
     );
 }

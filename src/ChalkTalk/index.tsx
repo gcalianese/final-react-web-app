@@ -21,7 +21,7 @@ export default function ChalkTalk() {
                         <Route path="/Posts/*" element={<Posts />} />
                         <Route path="/Search" element={<Search />} />
                         <Route path="/Search/results/*" element={<SearchLandingPage />} />
-                        <Route path="/Search/:gid" element={<GymPage />} />
+                        <Route path="/Search/details/:gid" element={<GymPage />} />
                         <Route path="/Users/*" element={<Users />} />
                     </Routes>
                 </div>

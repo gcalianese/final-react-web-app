@@ -114,6 +114,10 @@ body * {
     margin-bottom: 20px;
 }
 
+.gym-search-amt {
+    width: 75px;
+}
+
 .ct-posts-posts {
     background-color: rgb(222, 201, 220);
     text-align: center;
@@ -242,6 +246,10 @@ body * {
 .ct-logo {
     font-size: 50px;
     color: rgb(112, 182, 243);
+}
+
+.ct-button {
+    background-color: rgb(90, 17, 114);
 }
 
 .table-container {

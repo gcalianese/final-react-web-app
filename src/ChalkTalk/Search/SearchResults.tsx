@@ -1,8 +1,6 @@
 import { ListGroup, ListGroupItem } from "react-bootstrap";
-import { useState } from "react";
 import { Link } from "react-router";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import SearchControls from "./SearchControl";
 
 interface Gym {
     id: number;
@@ -20,12 +18,16 @@ interface Gym {
 }
 
 export default function SearchResults({ gyms }: {
-    gyms: Gym[];
+    gyms: Gym[] | null;
 }) {
     return (
         <div id="ct-search-results d-flex">
             <ListGroup id="ct-gym-results-list"
                 className="flex-fill">
+
+                {gyms == null && (
+                    <div>Loading...</div>
+                )}
 
                 {gyms != null && (
                     gyms.length === 0 ? (

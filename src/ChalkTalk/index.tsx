@@ -7,6 +7,7 @@ import Home from "./Home";
 import Search from "./Search";
 import Users from "./Users";
 import SearchLandingPage from "./Search/SearchLandingPage";
+import GymPage from "./Search/GymPage";
 
 export default function ChalkTalk() {
     return (
@@ -19,7 +20,8 @@ export default function ChalkTalk() {
                         <Route path="/Home/*" element={<Home />} />
                         <Route path="/Posts/*" element={<Posts />} />
                         <Route path="/Search" element={<Search />} />
-                        <Route path="/Search/*" element={<SearchLandingPage />} />
+                        <Route path="/Search/results/*" element={<SearchLandingPage />} />
+                        <Route path="/Search/:gid" element={<GymPage />} />
                         <Route path="/Users/*" element={<Users />} />
                     </Routes>
                 </div>

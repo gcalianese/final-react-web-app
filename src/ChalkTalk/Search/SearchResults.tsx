@@ -35,7 +35,7 @@ export default function SearchResults({ gyms }: {
                     ) : (
                         gyms.map((gym) => (
                             <ListGroupItem id={`ct-${gym.id}-link`} key={gym.id} >
-                                <Link to={`${gym.id}`} >
+                                <Link to={`/Search/${gym.id}`} >
                                     {gym.name}
                                 </Link>
                                 {gym.website.includes("http") &&

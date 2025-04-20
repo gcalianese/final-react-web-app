@@ -5,7 +5,6 @@ export default function Search() {
         <div id="ct-search-page">
             <h1>Find Gyms Near You</h1>
             <SearchControls />
-            {/* <SearchResults gyms={gyms} /> */}
         </div>
     );
 }

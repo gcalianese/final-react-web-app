@@ -53,7 +53,6 @@ export default function SinglePostPage() {
     const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
-    const [editCaption, setEditCaption] = useState(false);
     const [captionToEdit, setCaptionToEdit] = useState("");
     const [editCaptionCid, setEditCaptionCid] = useState("");
 
@@ -158,7 +157,7 @@ export default function SinglePostPage() {
     };
 
     const handleEnterEditCaption = async (post: Post) => {
-        const updatedPost = await postClient.updatePost(post._id, captionToEdit);
+        await postClient.updatePost(post._id, captionToEdit);
         setEditCaption(false);
         setCaptionToEdit("");
         setEditCaptionCid("");

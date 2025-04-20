@@ -238,6 +238,15 @@ export default function PostPage({ cat }: { cat: string }) {
         }
     }
 
+    const handlePostClick = (post: Post) => {
+        if (currentUser) {
+            navigate(`/Posts/${post._id}`);
+        } else {
+            setRestriction("view this post");
+            setShowSigninPopup(true);
+        }
+    }
+
     const navigate = useNavigate();
 
     return (
@@ -273,7 +282,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                     <td className="ct-post-cell">
                                         <div key={post._id} className="border post">
                                             <br />
-                                            <span onClick={() => navigate(`/Posts/${post._id}`)}>
+                                            <span onClick={() => handlePostClick(post)}>
                                                 {post.img && <img src={post.img} width="400px" alt="Post" />}
                                             </span><br />
                                             <span>
@@ -297,6 +306,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                     }
                                                 }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
                                             )}
+                                            <br />
                                             <label style={{ color: "#666666" }}>
                                                 Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
                                             </label>

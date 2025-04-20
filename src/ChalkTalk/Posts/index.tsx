@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router";
 import PostPage from "./PostPage";
 import SinglePostPage from "./SinglePostPage";
+import ProtectedRoute from "../ProtectedRoutes";
 
 export default function Posts() {
 
@@ -12,7 +13,7 @@ export default function Posts() {
                     <Route path="/Sends" element={<PostPage cat={"SENDS"} />} />
                     <Route path="/Gear" element={<PostPage cat={"GEAR"} />}/>
                     <Route path="/FT" element={<PostPage cat={"FT"} />}/>
-                    <Route path="/:pid" element={< SinglePostPage/>}/>
+                    <Route path="/:pid" element={<ProtectedRoute page="spp">< SinglePostPage/></ProtectedRoute>}/>
                 </Routes>
             </div>
         </div>

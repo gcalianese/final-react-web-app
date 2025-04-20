@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router";
 import PostPage from "./PostPage";
+import SinglePostPage from "./SinglePostPage";
 
 export default function Posts() {
 
@@ -11,6 +12,7 @@ export default function Posts() {
                     <Route path="/Sends" element={<PostPage cat={"SENDS"} />} />
                     <Route path="/Gear" element={<PostPage cat={"GEAR"} />}/>
                     <Route path="/FT" element={<PostPage cat={"FT"} />}/>
+                    <Route path="/:pid" element={< SinglePostPage/>}/>
                 </Routes>
             </div>
         </div>

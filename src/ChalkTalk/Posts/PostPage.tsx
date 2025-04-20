@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
 import * as likeClient from "./likesClient"
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import PostPreview from "./PostPreview";
 import Popup from "../Account/Popup";
@@ -94,7 +94,7 @@ export default function PostPage({ cat }: { cat: string }) {
     const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
-   // const [editCaption, setEditCaption] = useState(false);
+    // const [editCaption, setEditCaption] = useState(false);
 
     const handleAddPost = () => {
         if (currentUser) {
@@ -223,6 +223,8 @@ export default function PostPage({ cat }: { cat: string }) {
         }
     }
 
+    const navigate = useNavigate();
+
     return (
         <div className="ct-posts-container">
             <div className="header">
@@ -256,7 +258,9 @@ export default function PostPage({ cat }: { cat: string }) {
                                     <td className="ct-post-cell">
                                         <div key={post._id} className="border post">
                                             <br />
-                                            {post.img && <img src={post.img} width="400px" alt="Post" />}<br />
+                                            <span onClick={() => navigate(`/Posts/${post._id}`)}>
+                                                {post.img && <img src={post.img} width="400px" alt="Post" />}
+                                            </span><br />
                                             <span>
                                                 <Button
                                                     style={{ backgroundColor: currentUser && liked(post._id, currentUser._id) ? "rgb(164, 102, 182)" : "" }}

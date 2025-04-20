@@ -13,6 +13,17 @@ export default function PurpleStar({ gymId }: { gymId: string }) {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchFreshUser = async () => {
+            if (currentUser._id) {
+                const freshUser = await accountClient.getUserById(currentUser._id);
+                dispatch(setCurrentUser(freshUser));
+            }
+        };
+
+        fetchFreshUser();
+    }, []);
+
     const toggleGymFavorite = async () => {
         let newUser = null;
 
@@ -22,25 +33,10 @@ export default function PurpleStar({ gymId }: { gymId: string }) {
         } else if (gymId) {
             // Add this gym to favorites
             newUser = { ...currentUser, favoritedGyms: [...currentUser.favoritedGyms, gymId] };
-            console.log("New user: " + JSON.stringify(newUser));
         }
-
         dispatch(setCurrentUser(newUser));
         await accountClient.updateUser(newUser);
-        const res = await accountClient.getUserById(currentUser._id as string);
-        console.log("FETCHED- " + JSON.stringify(res));
     }
-
-    // TODO remove this useEffect (only used for debugging)
-    useEffect(() => {
-        if (currentUser) {
-            console.log(JSON.stringify(currentUser) + "\n");
-            console.log(currentUser.favoritedGyms.includes(gymId));
-            console.log(JSON.stringify(currentUser.favoritedGyms))
-            console.log(JSON.stringify(gymId));
-            console.log("\n");
-        }
-    }, [])
 
     return (
         <span>

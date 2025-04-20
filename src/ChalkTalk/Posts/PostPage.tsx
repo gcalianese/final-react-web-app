@@ -94,7 +94,7 @@ export default function PostPage({ cat }: { cat: string }) {
     const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
-    const [editCaption, setEditCaption] = useState(false);
+   // const [editCaption, setEditCaption] = useState(false);
 
     const handleAddPost = () => {
         if (currentUser) {

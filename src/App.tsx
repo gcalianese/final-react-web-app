@@ -4,6 +4,7 @@ import ChalkTalk from "./ChalkTalk";
 import NavBar from "./ChalkTalk/NavBar";
 
 import { HashRouter, Route, Routes } from "react-router-dom";
+import MainPageHeader from "./ChalkTalk/Header";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
       <Provider store={store}>
         <div>
           <NavBar />
+          <MainPageHeader />
           <Routes>
             <Route path="/*" element={<ChalkTalk />} />
           </Routes>

@@ -41,7 +41,7 @@ export default function SearchResults() {
                                     {/* Check if the user is loggedin, then if the gym is in their favorited list */}
                                     <PurpleStar gymId={gym.id.toString()} />
                                     <Link to={`/Search/details/${gym.id}`} className="ct-text-blue me-3" >
-                                        {gym.name}
+                                        {gym.name} {gym.address.city && `- ${gym.address.city}`}
                                     </Link>
                                     {gym.website.includes("http") &&
                                         <Link to={gym.website} target="_blank" rel="noopener noreferrer" className="ct-text-blue" >

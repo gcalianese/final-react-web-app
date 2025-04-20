@@ -176,7 +176,6 @@ export default function SinglePostPage() {
 
     return (
         <div id="single-post-container">
-            <h1>Single Post Page</h1>
             <div className="ct-posts-posts d-flex justify-content-center">
                 <table className="responsive-table">
                     <thead>

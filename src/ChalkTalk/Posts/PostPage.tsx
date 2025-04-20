@@ -128,26 +128,32 @@ export default function PostPage({ cat }: { cat: string }) {
     // Handle the image file upload
     const handlePostFromPreview = async (caption: string) => {
         if (!file) return;
-        const post = {
-            postedBy: currentUser._id,
-            category: cat,
-            caption: caption
-        };
 
-        const formData = new FormData();
-        formData.append("image", file);
-        formData.append("post", JSON.stringify(post));
+        if (file.type.startsWith('image/')) {
+            const post = {
+                postedBy: currentUser._id,
+                category: cat,
+                caption: caption
+            };
 
-        try {
-            await postClient.uploadImage(formData);
-            setShowPreview(false);
-            setFile(null);
-            console.log("Image uploaded successfully");
-            fetchPosts();
-        } catch (error) {
-            console.error("Error uploading image:", error);
-            alert("Failed to upload image. Please try again.");
+            const formData = new FormData();
+            formData.append("image", file);
+            formData.append("post", JSON.stringify(post));
+
+            try {
+                await postClient.uploadImage(formData);
+                setShowPreview(false);
+                setFile(null);
+                console.log("Image uploaded successfully");
+                fetchPosts();
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                alert("Failed to upload image. Please try again.");
+            }
+        } else {
+            console.log("not an image");
         }
+
     };
 
     const handleDelete = async (pid: string) => {
@@ -238,6 +244,15 @@ export default function PostPage({ cat }: { cat: string }) {
         }
     }
 
+    const handlePostClick = (post: Post) => {
+        if (currentUser) {
+            navigate(`/Posts/${post._id}`);
+        } else {
+            setRestriction("view this post");
+            setShowSigninPopup(true);
+        }
+    }
+
     const navigate = useNavigate();
 
     return (
@@ -273,7 +288,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                     <td className="ct-post-cell">
                                         <div key={post._id} className="border post">
                                             <br />
-                                            <span onClick={() => navigate(`/Posts/${post._id}`)}>
+                                            <span onClick={() => handlePostClick(post)}>
                                                 {post.img && <img src={post.img} width="400px" alt="Post" />}
                                             </span><br />
                                             <span>
@@ -297,6 +312,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                     }
                                                 }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
                                             )}
+                                            <br />
                                             <label style={{ color: "#666666" }}>
                                                 Posted at {new Date(post.createdAt).toLocaleString('en-US', { hour12: true }).replace(',', '')} <br />
                                             </label>
@@ -333,14 +349,12 @@ export default function PostPage({ cat }: { cat: string }) {
                     </tbody>
                 </table>
             </div>
-
-            {/* TODO: Verify it's an image file before uploading */}
             {file && (
                 <div>
                     <h4>File Selected: {file.name}</h4>
                 </div>
             )}
-            {showPreview && file && <PostPreview previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
+            {showPreview && file && <PostPreview selectNewFile={handleAddPost} file={file} previewURL={previewURL} onCancel={previewOnCancel} onPost={handlePostFromPreview} />}
             {showSigninPopup && (
                 <Popup
                     restriction={restriction}

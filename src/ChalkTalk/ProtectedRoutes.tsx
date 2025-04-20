@@ -10,5 +10,9 @@ export default function ProtectedRoute({ children, page }: { children: any; page
         return <Navigate to="/Home" replace />;
     }
 
+    if (page === "Profile" && !currentUser) {
+        return <Navigate to="/Home" replace />;
+    }
+
     return children;
 }

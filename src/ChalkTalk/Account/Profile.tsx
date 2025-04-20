@@ -76,7 +76,7 @@ export default function Profile() {
     const signout = async () => {
         await accountClient.signout();
         dispatch(accountReducer.setCurrentUser(null));
-        navigate("/Home");
+        navigate("/Home", { replace: true });
     }
 
     const fetchInfo = async () => {
@@ -137,7 +137,6 @@ export default function Profile() {
             } else {
                 const following = { _id: uuidv4(), followed: fid, follower: uid };
                 await accountClient.addFollowing(following);
-                console.log("FOLLOWINGS: " + JSON.stringify(followings))
             }
             fetchInfo();
         }

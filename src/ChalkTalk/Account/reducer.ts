@@ -7,7 +7,10 @@ const accountSlice = createSlice({
     initialState,
     reducers: {
         setCurrentUser: (state, action) => {
+            console.log("REDUCER - OLD user: " + JSON.stringify(state.currentUser));
+            console.log("REDUCER - Setting new user to " + JSON.stringify(action.payload));
             state.currentUser = action.payload;
+            console.log("REDUCER - New user to " + JSON.stringify(state.currentUser));
         },
     },
 });

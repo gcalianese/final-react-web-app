@@ -10,3 +10,4 @@ export const getNearbyGyms = async (zip: string, num: string) => {
     return response.data;
 };
 
+

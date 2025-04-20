@@ -45,7 +45,7 @@ export default function GymPage() {
                 </div>
                 :
                 <div>
-                    <h1> Details for {gym.name} <PurpleStar /> </h1>
+                    <h1> Details for {gym.name} <PurpleStar gymId={gym.id.toString()} /> </h1>
                     Gym Id: {gym.id} <br />
                     Gym coordinates: {gym.lon} (lon) x {gym.lat} (lat) <br />
                     Gym address: {gym.address.house} {gym.address.street} {gym.address.city} {gym.address.postcode} <br />

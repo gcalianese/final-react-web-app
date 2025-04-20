@@ -39,7 +39,7 @@ export default function SearchResults() {
                             <ListGroupItem id={`ct-${gym.id}-link`} key={gym.id} >
                                 <span>
                                     {/* Check if the user is loggedin, then if the gym is in their favorited list */}
-                                    <PurpleStar />
+                                    <PurpleStar gymId={gym.id.toString()} />
                                     <Link to={`/Search/details/${gym.id}`} className="ct-text-blue me-3" >
                                         {gym.name}
                                     </Link>

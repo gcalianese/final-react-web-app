@@ -17,8 +17,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     gyms: [],
+
     lastSearchedZipCode: "",
     lastSearchedNumResults: 5,
+    
     zipCode: "",
     numResults: 5,
 };

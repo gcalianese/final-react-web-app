@@ -31,7 +31,8 @@ export default function Signup() {
         lastName: "",
         dob: new Date("2000-01-01"),
         role: "USER",
-        homeGym: ""
+        homeGym: "",
+        favoritedGyms: [],
     }
 
     return (

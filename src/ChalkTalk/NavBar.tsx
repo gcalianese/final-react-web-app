@@ -1,5 +1,3 @@
-import { AiOutlineDashboard } from "react-icons/ai";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";

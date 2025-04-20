@@ -5,7 +5,7 @@ import * as accountClient from "./client"
 import * as accountReducer from "./reducer"
 import * as postClient from "../Posts/client"
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Button, FormControl } from "react-bootstrap";
+import { Button, FormControl, ListGroup, Table } from "react-bootstrap";
 import { Link } from "react-router";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
@@ -13,6 +13,7 @@ import { FaPlus } from "react-icons/fa";
 import "./profileStyle.css";
 import { v4 as uuidv4 } from "uuid";
 import { RxCross2 } from "react-icons/rx";
+import ChalkersPopup from "./ChalkersPopup";
 
 
 type User = {
@@ -72,6 +73,8 @@ export default function Profile() {
     const [edit, setEdit] = useState(false);
     const [editedUser, setEditedUser] = useState<User>(defaultUser);
     const [followings, setFollowings] = useState<Following[]>([]);
+
+    const [displayChalkers, setDisplayChalkers] = useState<boolean>(false);
 
     const signout = async () => {
         await accountClient.signout();
@@ -145,22 +148,62 @@ export default function Profile() {
 
     return (
         <div className="ct-profile-container">
-            <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
+            {/* Popup for followers/following */}
+            {displayChalkers && <ChalkersPopup userFollowers={userFollowers} userFollowing={userFollowing} closePopup={() => (setDisplayChalkers(!displayChalkers))} />}
+
+            {/* Header to edit username */}
+            <h1>
+                <FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />} {edit && <FaCheck onClick={handleEnter} />}
+            </h1>
+            <span className="ct-text-dark-purple" onClick={(_) => (setDisplayChalkers(!displayChalkers))}>
+                {userFollowers.length} {userFollowers.length == 1 ? "follower" : "followers"} | {userFollowing.length} following
+            </span>
+            <br />
+
+            {/* Follow/unfollow other users */}
             {currentUser && currentUser._id !== userProfile._id && <Button onClick={() => handleFollowingButton(userProfile._id, currentUser._id)}>{follows(userProfile._id, currentUser._id) ? <><RxCross2 /> Unfollow</> : <><FaPlus /> Follow</>}</Button>} <br />
 
-            First Name: {!edit && <>{userProfile.firstName}</>}
-            {edit && <><FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} /></>}<br />
-            {currentUser && <> Last Name: {!edit && <>{userProfile.lastName}</>}{edit && <><FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} /></>}
-                <br /></>}
-            Username: {!edit && userProfile.username} {edit && <><FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} /></>}
-            <br />
-            {!hasCid && (
-                <>
-                    Password: {!edit && userProfile.password}{edit && <><FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} /></>}<br />
-                </>
-            )}
+            {/* First name */}
+            <b>First Name:</b><br />
+            {/* Not editing */}
+            {!edit && <span>{userProfile.firstName} <br /></span>}
+            {/* Editing */}
+            {edit && <FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} />}<br />
+
+            {/* Last name*/}
             {currentUser && <>
-                Role: {(currentUser.role !== "ADMIN" || !edit) && userProfile.role}
+                <b>Last Name:</b> <br />
+                {/* Not editing */}
+                {!edit && <span>{userProfile.lastName} <br /></span>}
+                {/* Editing */}
+                {edit && <FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} />} <br />
+            </>}
+
+            {/* Username, not editing */}
+            <b>Username:</b> <br />
+            {!edit && <span>{userProfile.username}<br /></span>}
+            {/* Username, editing */}
+            {edit && <FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} />}
+            <br />
+
+            {/* Password */}
+            {!hasCid && (
+                <span>
+                    <b>Password:</b>  <br />
+                    {/* Not editing */}
+                    {!edit && <span>{userProfile.password}<br />  </span>}
+                    {/* Editing */}
+                    {edit && <FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} />}<br />
+                </span>
+            )}
+
+            {/* Role */}
+            {currentUser && <>
+                <b>Role:</b> <br />
+                {/* Not admin or not editing */}
+                {(currentUser.role !== "ADMIN" || !edit) && <span>{userProfile.role}<br /></span>}
+
+                {/* Admin and editing */}
                 {currentUser.role === "ADMIN" && edit && (
                     <select value={editedUser.role} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
                         className="form-select float-start w-25 wd-select-role">
@@ -171,32 +214,52 @@ export default function Profile() {
                 )}
                 <br />
             </>}
-            {currentUser && <>Email: {!edit && userProfile.email}{edit && <><FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> </>}<br /></>}
+
+            {/* Email */}
+            {currentUser &&
+                <span>
+                    <b>Email:</b> <br />
+                    {/* Not editing */}
+                    {!edit && <span>{userProfile.email}<br /></span>}
+                    {/* Not editing */}
+                    {edit && <FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />}<br />
+                </span>}
+
+            {/* Phone number */}
+            {/* If in your pfp or admin */}
             {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
-                <>                    Phone Number: {!edit && userProfile.phoneNumber}{edit && <><FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} /> </>}<br />
-                </>
+                <span>
+                    <b>Phone Number:</b><br />
+                    {/* Not editing */}
+                    {!edit && <span>{userProfile.phoneNumber}<br /></span>}
+                    {/* Editing */}
+                    {edit && <FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} />}<br />
+                </span>
             )}
-            {currentUser && <> Home Gym: {!edit && userProfile.homeGym}{edit && <><FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} /> </>}<br /></>}
-            Followers: {userFollowers.length}<br />
-            {userFollowers.map((follower) => (
-                <Link to={`/Account/Profile/${follower._id}`} key={`followedby-` + follower._id}>
-                    {follower.username} <br />
-                </Link>
-            ))}
-            Following: {userFollowing.length}<br />
-            {userFollowing.map((follows) => (
-                <Link to={`/Account/Profile/${follows._id}`} key={`follows-` + follows._id}>
-                    {follows.username} <br />
-                </Link>
-            ))}
-            Posts: {userPosts.length}<br />
+
+            {/* Home gym */}
+            {currentUser &&
+                <span>
+                    <b>Home Gym:</b> <br />
+                    {/* Not editing */}
+                    {!edit && <span>{userProfile.homeGym}<br /></span>}
+                    {/* Editing */}
+                    {edit && <FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} />}<br />
+                </span>}
+
+            {/* Number of posts */}
+            <b>Activity:</b> <br />
+            {userPosts.length} {userPosts.length == 1 ? "post" : "posts"} <br />
+
+            <br />
+
             {!hasCid && !edit && (
-                <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
+                <Button onClick={signout} className="w-100 mb-2 ct-btn">
                     Sign out
                 </Button>
             )}
             {edit && (
-                <Button onClick={handleCancel} className="w-100 mb-2" id="wd-signout-btn">
+                <Button onClick={handleCancel} className="w-100 mb-2 ct-btn">
                     Cancel edits
                 </Button>
             )}

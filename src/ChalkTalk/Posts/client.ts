@@ -39,3 +39,8 @@ export const getPost = async (pid : string) => {
     const response = await axiosWithCredentials.get(`${POSTS_API}/single/${pid}`);
     return response.data;
 }
+
+export const updatePost = async (pid : string, cap: string) => {
+    const response = await axiosWithCredentials.put(`${POSTS_API}/${pid}/${cap}`);
+    return response.data;
+}

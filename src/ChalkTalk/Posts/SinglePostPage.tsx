@@ -12,6 +12,7 @@ import * as likeClient from "./likesClient";
 import Popup from "../Account/Popup";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router";
+import { useNavigate } from "react-router";
 
 export default function SinglePostPage() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -52,6 +53,9 @@ export default function SinglePostPage() {
     const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
+    const [editCaption, setEditCaption] = useState(false);
+    const [captionToEdit, setCaptionToEdit] = useState("");
+    const [editCaptionCid, setEditCaptionCid] = useState("");
 
     const { pid } = useParams();
 
@@ -78,7 +82,7 @@ export default function SinglePostPage() {
 
     const handleDelete = async (pid: string) => {
         await postClient.deletePost(pid);
-        setPost(null);
+        navigate(-1);
     };
 
     const handleLike = async (pid: string) => {
@@ -153,6 +157,24 @@ export default function SinglePostPage() {
         }
     };
 
+    const handleEnterEditCaption = async (post: Post) => {
+        const updatedPost = await postClient.updatePost(post._id, captionToEdit);
+        setEditCaption(false);
+        setCaptionToEdit("");
+        setEditCaptionCid("");
+        fetchPost();
+    }
+
+    const handleEditCaption = async (post: Post) => {
+        if (currentUser && currentUser._id === post.postedBy) {
+            setEditCaption(true);
+            setCaptionToEdit(post.caption);
+            setEditCaptionCid(post._id);
+        }
+    }
+
+    const navigate = useNavigate();
+
     if (!post) return <div>Loading...</div>;
 
     return (
@@ -198,10 +220,15 @@ export default function SinglePostPage() {
                                         Likes: {likes.filter((like) => like.postId === post._id).length}
                                     </span>
                                     <br />
-                                    <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}>
-                                        {post.username}
-                                    </Link>
-                                    : <label>{post.caption}</label><br />
+                                    <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>:    {post._id !== editCaptionCid && (<label onClick={() => handleEditCaption(post)}>{post.caption}</label>)}
+                                    {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
+                                        <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleEnterEditCaption(post);
+                                            }
+                                        }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
+                                    )}
                                     <label style={{ color: "#666666" }}>
                                         <br />
                                         Posted at {" "}

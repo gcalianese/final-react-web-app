@@ -60,7 +60,7 @@ export default function SearchControls() {
                 }}
                 maxLength={5}
             />
-            <select value={numResults} onChange={(e) => setNumResults(e.target.value)}
+            <select value={numResults} onChange={(e) => dispatch(setNumResults(e.target.value))}
                 id="ct-select-role" className="form-select gym-search-amt me-1" >
                 {numSearchOptions.map((option) => (
                     <option key={option} value={option}>

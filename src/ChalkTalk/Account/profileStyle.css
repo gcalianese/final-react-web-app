@@ -16,13 +16,13 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
-    color: #6c63ff;
+    color: rgb(90, 17, 114);
 }
 
 .ct-profile-container svg {
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
-    color: #6c63ff;
+    color: rgb(90, 17, 114);
 }
 
 .ct-profile-container svg:hover {
@@ -48,7 +48,7 @@
 }
 
 .ct-profile-container a {
-    color: #7f5af0;
+    color: rgb(90, 17, 114);
     text-decoration: none;
 }
 
@@ -58,7 +58,7 @@
 }
 
 #wd-signout-btn {
-    background-color: #7f5af0;
+    background-color: rgb(90, 17, 114);
     border: none;
     font-weight: 600;
     border-radius: 8px;

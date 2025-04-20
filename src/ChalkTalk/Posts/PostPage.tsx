@@ -229,7 +229,7 @@ export default function PostPage({ cat }: { cat: string }) {
                 {cat}
                 <span className="add-post-button">
                     <Button onClick={handleAddPost}>
-                        <FaPlus /> Add a {cat} Post
+                        <label ><FaPlus /> Add a {cat} Post</label>
                     </Button>
                 </span>
             </div>

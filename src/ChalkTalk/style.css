@@ -10,8 +10,14 @@ body * {
 }
 
 
-.ct-home-page, .ct-profile-container {
-    margin-left: 200px; /* Move content to the right of the navbar */
+.ct-home-page,
+.ct-profile-container,
+#ct-signin-screen,
+#ct-signup-screen,
+#ct-search-page,
+#ct-users {
+    margin-left: 200px;
+    /* Move content to the right of the navbar */
 }
 
 #ct {
@@ -45,7 +51,7 @@ body * {
 }
 
 .nav-link-container:hover {
-    background-color: rgb(112, 182, 243);
+    background-color: rgb(28, 41, 114);
 }
 
 .nav-link-text {
@@ -68,7 +74,7 @@ body * {
 }
 
 .ct-posts-container {
-    margin-left: 220px;
+    margin-left: 200px;
     padding: 20px;
 }
 
@@ -292,7 +298,12 @@ body * {
         padding: 10px;
     }
 
-    .ct-home-page, .ct-profile-container {
+    .ct-home-page,
+    .ct-profile-container,
+    #ct-signin-screen,
+    #ct-signup-screen,
+    #ct-search-page,
+    #ct-users {
         margin-left: 0px;
     }
 }

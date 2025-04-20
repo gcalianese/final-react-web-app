@@ -31,7 +31,7 @@ export default function Search() {
     const [numResults, setNumResults] = useState("5");
 
     return (
-        <div>
+        <div id="ct-search-page">
             <h1>Find Gyms Near You</h1>
             <div className="p-3">
                 <FormControl className="ct-zipcode-input"

@@ -50,7 +50,7 @@ export default function GymPage() {
                     Gym coordinates: {gym.lon} (lon) x {gym.lat} (lat) <br />
                     Gym address: {gym.address.house} {gym.address.street} {gym.address.city} {gym.address.postcode} <br />
                     Gym website: {gym.website} <br />
-                    <iframe src={gym.website} width="80%" height="550px"/> 
+                    {gym.website.includes("http") && <iframe src={gym.website} width="80%" height="550px"/>}
                 </div>}
         </div>
     );

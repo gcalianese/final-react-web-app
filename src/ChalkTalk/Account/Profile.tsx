@@ -9,7 +9,11 @@ import { Button, FormControl } from "react-bootstrap";
 import { Link } from "react-router";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import "./profileStyle.css";
+import { v4 as uuidv4 } from "uuid";
+import { RxCross2 } from "react-icons/rx";
+
 
 type User = {
     _id: string;
@@ -48,6 +52,12 @@ const defaultUser: User = {
     postCount: "0",
 };
 
+type Following = {
+    _id: string,
+    followed: string,
+    follower: string,
+}
+
 export default function Profile() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const { cid } = useParams();
@@ -61,6 +71,7 @@ export default function Profile() {
     const [userPosts, setUserPosts] = useState<User[]>([]);
     const [edit, setEdit] = useState(false);
     const [editedUser, setEditedUser] = useState<User>(defaultUser);
+    const [followings, setFollowings] = useState<Following[]>([]);
 
     const signout = async () => {
         await accountClient.signout();
@@ -93,6 +104,8 @@ export default function Profile() {
             const posts = await postClient.getAllPostsBy(currentUser._id);
             setUserPosts(posts);
         }
+        const allFollowings = await accountClient.getAllFollowings();
+        setFollowings(allFollowings);
     }
 
     useEffect(() => {
@@ -110,9 +123,31 @@ export default function Profile() {
         setEdit(false);
     }
 
+    // Checks if the user with uid follows the user with fid
+    const follows = (fid: string, uid: string) => {
+        if (followings) {
+            return followings.some(f => f.followed === fid && f.follower === uid);
+        }
+    }
+
+    const handleFollowingButton = async (fid: string, uid: string) => {
+        if (currentUser) {
+            if (follows(fid, uid)) {
+                await accountClient.deleteFollowing(fid, uid);
+            } else {
+                const following = { _id: uuidv4(), followed: fid, follower: uid };
+                await accountClient.addFollowing(following);
+                console.log("FOLLOWINGS: " + JSON.stringify(followings))
+            }
+            fetchInfo();
+        }
+    }
+
     return (
         <div className="ct-profile-container">
             <h1><FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />}{edit && <FaCheck onClick={handleEnter} />}</h1>
+            {currentUser && currentUser._id !== userProfile._id && <Button onClick={() => handleFollowingButton(userProfile._id, currentUser._id)}>{follows(userProfile._id, currentUser._id) ? <><RxCross2 /> Unfollow</> : <><FaPlus /> Follow</>}</Button>} <br />
+
             First Name: {!edit && <>{userProfile.firstName}</>}
             {edit && <><FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} /></>}<br />
             {currentUser && <> Last Name: {!edit && <>{userProfile.lastName}</>}{edit && <><FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} /></>}
@@ -160,7 +195,7 @@ export default function Profile() {
                     Sign out
                 </Button>
             )}
-                 {edit && (
+            {edit && (
                 <Button onClick={handleCancel} className="w-100 mb-2" id="wd-signout-btn">
                     Cancel edits
                 </Button>

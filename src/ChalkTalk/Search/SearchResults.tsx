@@ -2,6 +2,7 @@ import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { Link } from "react-router";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import PurpleStar from "./PurpleStar";
 
 interface Gym {
     id: number;
@@ -36,14 +37,19 @@ export default function SearchResults() {
                     ) : (
                         gyms.map((gym: Gym) => (
                             <ListGroupItem id={`ct-${gym.id}-link`} key={gym.id} >
-                                <Link to={`/Search/details/${gym.id}`} >
-                                    {gym.name}
-                                </Link>
-                                {gym.website.includes("http") &&
-                                    <Link to={gym.website} target="_blank" rel="noopener noreferrer" >
-                                        <FaExternalLinkAlt />
-                                    </Link>}
-                                <br />
+                                <span>
+                                    {/* Check if the user is loggedin, then if the gym is in their favorited list */}
+                                    <PurpleStar />
+                                    <Link to={`/Search/details/${gym.id}`} className="ct-text-blue me-3" >
+                                        {gym.name}
+                                    </Link>
+                                    {gym.website.includes("http") &&
+                                        <Link to={gym.website} target="_blank" rel="noopener noreferrer" className="ct-text-blue" >
+                                            <FaExternalLinkAlt />
+                                        </Link>
+                                    }
+                                    <br />
+                                </span>
                             </ListGroupItem>
                         ))
                     )

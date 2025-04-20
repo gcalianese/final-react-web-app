@@ -252,6 +252,14 @@ body * {
     background-color: rgb(90, 17, 114);
 }
 
+.ct-text-dark-purple {
+    color: rgb(90, 17, 114);
+}
+
+.ct-text-blue {
+    color: rgb(112, 182, 243);
+}
+
 .table-container {
     overflow-x: auto;
     padding: 20px;

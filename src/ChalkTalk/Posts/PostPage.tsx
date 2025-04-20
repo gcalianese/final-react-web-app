@@ -139,11 +139,11 @@ export default function PostPage({ cat }: { cat: string }) {
         formData.append("post", JSON.stringify(post));
 
         try {
-            postClient.uploadImage(formData);
-            await fetchPosts();
+            await postClient.uploadImage(formData);
             setShowPreview(false);
             setFile(null);
             console.log("Image uploaded successfully");
+            fetchPosts();
         } catch (error) {
             console.error("Error uploading image:", error);
             alert("Failed to upload image. Please try again.");
@@ -284,7 +284,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                     <AiOutlineLike /> Like
                                                 </Button>
                                                 <Button onClick={() => handleAddComment(post._id)}><FaRegComment /> Comment</Button>
-                                                {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete} size="lg"><FaTrash /></Button></>}
+                                                {currentUser && (currentUser._id === post.postedBy || currentUser.role === "ADMIN" || currentUser.role === "MOD") && <><Button onClick={() => handleDelete(post._id)} size="lg"><FaTrash /></Button></>}
                                                 Likes: {likes.filter((like) => like.postId === post._id).length}
                                             </span>
                                             <br />

@@ -1,0 +1,10 @@
+#single-post-container {
+    margin-left: 200px;
+}
+
+
+@media (max-width: 768px) {
+    #single-post-container {
+        margin-left: 0px;
+    }
+}

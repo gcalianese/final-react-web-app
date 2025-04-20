@@ -11,7 +11,6 @@ import { IoIosFitness } from "react-icons/io";
 import { GiRopeDart } from "react-icons/gi";
 import { GiMountaintop } from "react-icons/gi";
 
-
 export default function NavBar() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const { pathname } = useLocation();
@@ -46,6 +45,14 @@ export default function NavBar() {
             { label: "Signup", path: "/Account/Signup", icon: AiOutlineDashboard },
         ];
 
+    const active = (pathname: string, link: string) => {
+        if (link === "/Account/Profile") {
+            return pathname === "/Account/Profile";
+        }
+
+        return pathname.includes(link);
+    };
+
     return (
         <div className="nav-bar">
             <ListGroup id="ct-navigation"
@@ -60,7 +67,7 @@ export default function NavBar() {
                 {
                     links.map((link) => (
                         <ListGroup.Item key={link.label} as={Link} to={link.path}
-                            className={`nav-link-container border-0 ${pathname.includes(link.path) ? "text-danger bg-white" : "text-white bg-transparent"}`}>
+                            className={`nav-link-container border-0 ${active(pathname, link.path) ? "text-danger bg-white" : "text-white bg-transparent"}`}>
                             <span className="nav-link-text">
                                 <link.icon /> {link.label}
                             </span>

@@ -1,36 +1,35 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SearchControls from "./SearchControl";
 import SearchResults from "./SearchResults";
 import * as searchClient from "./client"
 import { useSearchParams } from "react-router";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setGyms, setZipCode, setNumResults, setLastSearchedZipCode, setLastSearchedNumResults } from "./reducer";
 
 export default function SearchLandingPage() {
-    interface Gym {
-        id: number;
-        lat: number;
-        lon: number;
-        name: string;
-        sport: string;
-        address: {
-            house: string,
-            street: string,
-            city: string,
-            postcode: string,
-        }
-        website: string;
-    }
-
-    const [gyms, setGyms] = useState<Gym[] | null>(null);
-
     const [searchParams] = useSearchParams();
     const location = useLocation();
+    const dispatch = useDispatch()
 
-    const submitSearch = async (zip: string, numResults: string) => {
-        setGyms(null);
-        const response = await searchClient.getNearbyGyms(zip, numResults);
-        console.log("response: " + JSON.stringify(response));
-        setGyms(response);
+    const { lastSearchedZipCode, lastSearchedNumResults } = useSelector((state: any) => state.gymsReducer);
+
+    const submitSearch = async (newZipCode: string, newNumResults: string) => {
+        // Repeat query, don't need to do a new search
+        if (newZipCode === lastSearchedZipCode && newNumResults === lastSearchedNumResults) {
+            return;
+        }
+
+        // New query, set reducer values
+        dispatch(setZipCode(newZipCode));
+        dispatch(setNumResults(newNumResults));
+        dispatch(setLastSearchedZipCode(newZipCode));
+        dispatch(setLastSearchedNumResults(newNumResults));
+        dispatch(setGyms(null));
+
+        // Search api
+        const response = await searchClient.getNearbyGyms(newZipCode, newNumResults);
+        dispatch(setGyms(response));
     }
 
     useEffect(() => {
@@ -45,7 +44,7 @@ export default function SearchLandingPage() {
         <div id="ct-search-page">
             <h1>Gyms Near You</h1>
             <SearchControls />
-            <SearchResults gyms={gyms} />
+            <SearchResults />
         </div>
     );
 }

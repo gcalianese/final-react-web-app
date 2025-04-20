@@ -1,6 +1,7 @@
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { Link } from "react-router";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 interface Gym {
     id: number;
@@ -17,9 +18,9 @@ interface Gym {
     website: string;
 }
 
-export default function SearchResults({ gyms }: {
-    gyms: Gym[] | null;
-}) {
+export default function SearchResults() {
+    const { gyms } = useSelector((state: any) => state.gymsReducer);
+
     return (
         <div id="ct-search-results d-flex">
             <ListGroup id="ct-gym-results-list"
@@ -33,7 +34,7 @@ export default function SearchResults({ gyms }: {
                     gyms.length === 0 ? (
                         <div>No results found.</div>
                     ) : (
-                        gyms.map((gym) => (
+                        gyms.map((gym: Gym) => (
                             <ListGroupItem id={`ct-${gym.id}-link`} key={gym.id} >
                                 <Link to={`/Search/${gym.id}`} >
                                     {gym.name}

@@ -1,30 +1,39 @@
 import { Button } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormControl } from "react-bootstrap";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { setZipCode, setNumResults } from "./reducer";
+import { useDispatch, useSelector } from "react-redux";
+
+/*
+{ submitSearch } : {
+    submitSearch: (zc: string, n: string) => void;
+}
+*/
 
 export default function SearchControls() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const dispatch = useDispatch();
+
+    const [searchParams] = useSearchParams();
+    const { zipCode, numResults } = useSelector((state: any) => state.gymsReducer);
 
     const numSearchOptions = ["1", "5", "10"];
 
     const submitSearch = async () => {
-        if (zip != "") {
-            navigate(`/Search/results?zc=${zip}&n=${numResults}`);
+        if (zipCode != "") {
+            // Takes you to SearchLandingPage.tsx
+            navigate(`/Search/results?zc=${zipCode}&n=${numResults}`);
         }
     }
-
-    const location = useLocation();
-    const [zip, setZip] = useState("");
-    const [numResults, setNumResults] = useState("5");
-    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         const zc = searchParams.get("zc");
         const n = searchParams.get("n");
 
         if (zc && zc.length <= 5) {
-            setZip(zc);
+            setZipCode(zc);
         }
 
         if (n && numSearchOptions.includes(n)) {
@@ -36,8 +45,7 @@ export default function SearchControls() {
         <div id="ct-search-controls" className="m-1 d-flex justify-content-center">
             <FormControl id="ct-zipcode-input" className="w-25 me-1"
                 placeholder="Zipcode, eg. 02115"
-                //defaultValue={zip}
-                value={zip}  // Make it a controlled input
+                value={zipCode}  // Make it a controlled input
                 onKeyDown={(e) => {
                     if (e.key === "Enter") {
                         submitSearch();
@@ -47,7 +55,7 @@ export default function SearchControls() {
                     const newValue = e.target.value;
                     // Only update if the input is numeric and no more than 5 characters
                     if (/^\d{0,5}$/.test(newValue)) {
-                        setZip(newValue);
+                        dispatch(setZipCode(newValue));
                     }
                 }}
                 maxLength={5}

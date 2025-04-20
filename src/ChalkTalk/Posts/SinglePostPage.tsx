@@ -158,7 +158,6 @@ export default function SinglePostPage() {
 
     const handleEnterEditCaption = async (post: Post) => {
         await postClient.updatePost(post._id, captionToEdit);
-        setEditCaption(false);
         setCaptionToEdit("");
         setEditCaptionCid("");
         fetchPost();
@@ -166,7 +165,6 @@ export default function SinglePostPage() {
 
     const handleEditCaption = async (post: Post) => {
         if (currentUser && currentUser._id === post.postedBy) {
-            setEditCaption(true);
             setCaptionToEdit(post.caption);
             setEditCaptionCid(post._id);
         }

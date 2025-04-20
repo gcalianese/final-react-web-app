@@ -94,7 +94,6 @@ export default function PostPage({ cat }: { cat: string }) {
     const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
-    const [editCaption, setEditCaption] = useState(false);
     const [captionToEdit, setCaptionToEdit] = useState("");
     const [editCaptionCid, setEditCaptionCid] = useState("");
 
@@ -226,8 +225,7 @@ export default function PostPage({ cat }: { cat: string }) {
     }
 
     const handleEnterEditCaption = async (post: Post) => {
-        const updatedPost = await postClient.updatePost(post._id, captionToEdit);
-        setEditCaption(false);
+        await postClient.updatePost(post._id, captionToEdit);
         setCaptionToEdit("");
         setEditCaptionCid("");
         fetchPosts();
@@ -235,7 +233,6 @@ export default function PostPage({ cat }: { cat: string }) {
 
     const handleEditCaption = async (post: Post) => {
         if (currentUser && currentUser._id === post.postedBy) {
-            setEditCaption(true);
             setCaptionToEdit(post.caption);
             setEditCaptionCid(post._id);
         }

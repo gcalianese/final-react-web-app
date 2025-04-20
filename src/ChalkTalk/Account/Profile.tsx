@@ -153,105 +153,126 @@ export default function Profile() {
             {/* Header to edit username */}
             <h1>
                 <FaRegCircleUser /> {userProfile.username} {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && !edit && <FaPencil onClick={() => setEdit(true)} />} {edit && <FaCheck onClick={handleEnter} />}
+                {/* Follow/unfollow other users */}
+                {currentUser && currentUser._id !== userProfile._id &&
+                    <Button className="ct-btn ms-1" onClick={() => handleFollowingButton(userProfile._id, currentUser._id)}>
+                        {follows(userProfile._id, currentUser._id) ? "Unfollow" : "Follow"}
+                    </Button>} <br />
             </h1>
             <span className="ct-text-dark-purple" onClick={(_) => (setDisplayChalkers(!displayChalkers))}>
                 {userFollowers.length} {userFollowers.length == 1 ? "follower" : "followers"} | {userFollowing.length} following
             </span>
             <br />
 
-            {/* Follow/unfollow other users */}
-            {currentUser && currentUser._id !== userProfile._id && <Button onClick={() => handleFollowingButton(userProfile._id, currentUser._id)}>{follows(userProfile._id, currentUser._id) ? <><RxCross2 /> Unfollow</> : <><FaPlus /> Follow</>}</Button>} <br />
-
-            {/* First name */}
-            <b>First Name:</b><br />
-            {/* Not editing */}
-            {!edit && <span>{userProfile.firstName} <br /></span>}
-            {/* Editing */}
-            {edit && <FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} />}<br />
-
-            {/* Last name*/}
-            {currentUser && <>
-                <b>Last Name:</b> <br />
-                {/* Not editing */}
-                {!edit && <span>{userProfile.lastName} <br /></span>}
-                {/* Editing */}
-                {edit && <FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} />} <br />
-            </>}
-
-            {/* Username, not editing */}
-            <b>Username:</b> <br />
-            {!edit && <span>{userProfile.username}<br /></span>}
-            {/* Username, editing */}
-            {edit && <FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} />}
-            <br />
-
-            {/* Password */}
-            {!hasCid && (
-                <span>
-                    <b>Password:</b>  <br />
+            <ListGroup className="ct-profile-table">
+                <ListGroup.Item>
+                    {/* First name */}
+                    <b>First Name:</b><br />
                     {/* Not editing */}
-                    {!edit && <span>{userProfile.password}<br />  </span>}
+                    {!edit && <span>{userProfile.firstName}</span>}
                     {/* Editing */}
-                    {edit && <FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} />}<br />
-                </span>
-            )}
+                    {edit && <FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} />}
+                </ListGroup.Item>
 
-            {/* Role */}
-            {currentUser && <>
-                <b>Role:</b> <br />
-                {/* Not admin or not editing */}
-                {(currentUser.role !== "ADMIN" || !edit) && <span>{userProfile.role}<br /></span>}
+                <ListGroup.Item>
+                    {/* Last name*/}
+                    {currentUser && <>
+                        <b>Last Name:</b> <br />
+                        {/* Not editing */}
+                        {!edit && <span>{userProfile.lastName}</span>}
+                        {/* Editing */}
+                        {edit && <FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} />}
+                    </>}
+                </ListGroup.Item>
 
-                {/* Admin and editing */}
-                {currentUser.role === "ADMIN" && edit && (
-                    <select value={editedUser.role} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
-                        className="form-select float-start w-25 wd-select-role">
-                        <option value="ADMIN">ADMIN</option>
-                        <option value="MOD">MOD</option>
-                        <option value="USER">USER</option>
-                    </select>
+                <ListGroup.Item>
+                    {/* Username, not editing */}
+                    <b>Username:</b> <br />
+                    {!edit && <span>{userProfile.username}</span>}
+                    {/* Username, editing */}
+                    {edit && <FormControl defaultValue={editedUser.username} onChange={(e) => setEditedUser({ ...editedUser, username: e.target.value })} />}
+                </ListGroup.Item>
+
+                {!hasCid && (
+                    <ListGroup.Item>
+                        {/* Password */}
+
+                        <span>
+                            <b>Password:</b>  <br />
+                            {/* Not editing */}
+                            {!edit && <span>{userProfile.password}</span>}
+                            {/* Editing */}
+                            {edit && <FormControl defaultValue={editedUser.password} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })} />}
+                        </span>
+
+                    </ListGroup.Item>
                 )}
-                <br />
-            </>}
 
-            {/* Email */}
-            {currentUser &&
-                <span>
-                    <b>Email:</b> <br />
-                    {/* Not editing */}
-                    {!edit && <span>{userProfile.email}<br /></span>}
-                    {/* Not editing */}
-                    {edit && <FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />}<br />
-                </span>}
+                <ListGroup.Item>
+                    {/* Role */}
+                    {currentUser && <>
+                        <b>Role:</b> <br />
+                        {/* Not admin or not editing */}
+                        {(currentUser.role !== "ADMIN" || !edit) && <span>{userProfile.role}</span>}
 
-            {/* Phone number */}
-            {/* If in your pfp or admin */}
-            {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
-                <span>
-                    <b>Phone Number:</b><br />
-                    {/* Not editing */}
-                    {!edit && <span>{userProfile.phoneNumber}<br /></span>}
-                    {/* Editing */}
-                    {edit && <FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} />}<br />
-                </span>
-            )}
+                        {/* Admin and editing */}
+                        {currentUser.role === "ADMIN" && edit && (
+                            <select value={editedUser.role} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value as UserType })}
+                                className="form-select float-start w-25 wd-select-role">
+                                <option value="ADMIN">ADMIN</option>
+                                <option value="MOD">MOD</option>
+                                <option value="USER">USER</option>
+                            </select>
+                        )}
+                    </>}
+                </ListGroup.Item>
 
-            {/* Home gym */}
-            {currentUser &&
-                <span>
-                    <b>Home Gym:</b> <br />
-                    {/* Not editing */}
-                    {!edit && <span>{userProfile.homeGym}<br /></span>}
-                    {/* Editing */}
-                    {edit && <FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} />}<br />
-                </span>}
+                <ListGroup.Item>
+                    {/* Email */}
+                    {currentUser &&
+                        <span>
+                            <b>Email:</b> <br />
+                            {/* Not editing */}
+                            {!edit && <span>{userProfile.email}</span>}
+                            {/* Not editing */}
+                            {edit && <FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />}
+                        </span>}
+                </ListGroup.Item>
 
-            {/* Number of posts */}
-            <b>Activity:</b> <br />
-            {userPosts.length} {userPosts.length == 1 ? "post" : "posts"} <br />
+                {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
+                    <ListGroup.Item>
+                        {/* Phone number */}
+                        {/* If in your pfp or admin */}
+                        <span>
+                            <b>Phone Number:</b><br />
+                            {/* Not editing */}
+                            {!edit && <span>{userProfile.phoneNumber}</span>}
+                            {/* Editing */}
+                            {edit && <FormControl defaultValue={editedUser.phoneNumber} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, phoneNumber: e.target.value })} />}
+                        </span>
+                    </ListGroup.Item>
+                )}
+
+                <ListGroup.Item>
+                    {/* Home gym */}
+                    {currentUser &&
+                        <span>
+                            <b>Home Gym:</b> <br />
+                            {/* Not editing */}
+                            {!edit && <span>{userProfile.homeGym}</span>}
+                            {/* Editing */}
+                            {edit && <FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} />}
+                        </span>}
+                </ListGroup.Item>
+
+                <ListGroup.Item>
+                    {/* Number of posts */}
+                    <b>Activity:</b> <br />
+                    {userPosts.length} {userPosts.length == 1 ? "post" : "posts"}
+                </ListGroup.Item>
+            </ListGroup>
 
             <br />
-
             {!hasCid && !edit && (
                 <Button onClick={signout} className="w-100 mb-2 ct-btn">
                     Sign out

@@ -39,8 +39,6 @@ export default function NavBar() {
             { label: "Gear", path: "/Posts/Gear", icon: GiRopeDart },
             { label: "Fit/Tech", path: "/Posts/FT", icon: IoIosFitness },
             { label: "Find a Gym", path: "/Search", icon: HiMagnifyingGlass },
-            { label: "Signin", path: "/Account/Signin", icon: AiOutlineDashboard },
-            { label: "Signup", path: "/Account/Signup", icon: AiOutlineDashboard },
         ];
 
     const active = (pathname: string, link: string) => {

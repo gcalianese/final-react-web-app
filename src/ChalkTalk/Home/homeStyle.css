@@ -1,20 +1,14 @@
 .ct-home-page {
     padding: 40px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(to bottom right, #f0f4ff, #ffffff);
-    color: #333;
-    min-height: 100vh;
-    box-sizing: border-box;
     border-radius: 10px;
 }
 
 .ct-home-page h1 {
-    font-size: 3rem;
-    font-weight: 700;
+    font-weight: bolder;
     text-align: center;
     margin-bottom: 50px;
     color: rgb(90, 17, 114);
-    position: relative;
 }
 
 .split-screen {
@@ -29,13 +23,16 @@
 .left-panel,
 .right-panel {
     flex: 1;
-    min-width: 300px;
     padding: 30px;
     background-color: #ffffffcc;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     backdrop-filter: blur(10px);
+}
+
+/* Offset the right panel for funsies */
+.right-panel {
+    margin-top: 50px;
 }
 
 /* Hover Effects */
@@ -54,36 +51,4 @@ h2 {
 p {
     font-size: 1.1rem;
     line-height: 1.6;
-}
-
-/* 🔁 Responsive Breakpoints */
-@media (max-width: 1024px) {
-    .ct-home-page {
-        padding: 30px;
-    }
-
-    .split-screen {
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .left-panel,
-    .right-panel {
-        padding: 24px;
-    }
-}
-
-@media (max-width: 600px) {
-    .ct-home-page h1 {
-        font-size: 2.2rem;
-    }
-
-    p {
-        font-size: 1rem;
-    }
-
-    .left-panel,
-    .right-panel {
-        padding: 20px;
-    }
 }

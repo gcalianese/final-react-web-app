@@ -60,7 +60,7 @@ export default function NavBar() {
                         </div>
                     </Link>
                 </div>
-                <div>
+                <div className="ct-navtabs" >
                     {links.map((link) => (
                         <ListGroup.Item key={link.label} as={Link} to={link.path}
                             className={`border-0 ${active(pathname, link.path) ? "nav-link-container-selected" : "nav-link-container"}`}>

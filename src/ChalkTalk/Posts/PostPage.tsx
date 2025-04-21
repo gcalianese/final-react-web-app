@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
 import * as likeClient from "./likesClient"
-import { Link, Navigate, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { FaTrash } from "react-icons/fa";
 import PostPreview from "./PostPreview";
 import Popup from "../Account/Popup";
@@ -259,7 +259,12 @@ export default function PostPage({ cat }: { cat: string }) {
     return (
         <div className="ct-posts-container">
             <div className="header">
-                Welcome to {cat}
+                <span className="ct-header-title">
+                    Welcome to {cat}
+                </span>
+                <span className="ct-header-description">
+                    Please post about topics related to {cat}.
+                </span>
                 <Button className="ct-btn add-post-button" onClick={handleAddPost}>
                     <label ><FaPlus /> {cat} Post</label>
                 </Button>

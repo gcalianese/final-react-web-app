@@ -18,9 +18,13 @@ export default function Home() {
                         Grace Calianese and Haig Shirozian are students in CS4550-02 Web Development who are passoniate
                         about both programming and rock climbing.
                     </p>
-                    <Link to={"https://github.com/gcalianese/final-node-server-app"} id="ct-node-server-repo">Node Server Repo</Link>
+                    <Link to={"https://github.com/gcalianese/final-node-server-app"} id="ct-node-server-repo" className="ct-text-dark-purple">
+                        Node Server Repo
+                    </Link>
                     <br />
-                    <Link to={"https://github.com/gcalianese/final-react-web-app" } id="ct-web-app-repo">React Web App Repo</Link>
+                    <Link to={"https://github.com/gcalianese/final-react-web-app"} id="ct-web-app-repo" className="ct-text-dark-purple">
+                        React Web App Repo
+                    </Link>
                     <p>
 
                     </p>

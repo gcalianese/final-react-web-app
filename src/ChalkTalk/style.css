@@ -64,7 +64,8 @@ body * {
 .nav-bar {
     width: 200px;
     height: 100%;
-    background-color: rgb(90, 17, 114);
+    /* background-color: rgb(90, 17, 114); */
+    background-color: rgb(112, 182, 243);
     position: fixed;
     display: flex;
     padding: 5px;
@@ -111,20 +112,20 @@ body * {
 }
 
 .nav-link-text-selected {
-    color: rgb(112, 182, 243);
+    color: rgb(90, 17, 114);
     font-size: 20px;
     margin-left: 10px;
 }
 
 .nav-link-text svg {
-    color: rgb(112, 182, 243);
+    color: white;
 }
 
 .ct-logo-container {
     margin: 5px;
     text-align: center;
     font-size: 24px;
-    color: rgb(112, 182, 243);
+    color: rgb(90, 17, 114);
     background-color: white;
     font-weight: bold;
     border-radius: 50px;
@@ -160,6 +161,26 @@ body * {
     margin-bottom: 20px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
+}
+
+.ct-header-title {
+    background-color: white;
+    color: rgb(90, 17, 114);
+    border-radius: 10px;
+    width: 50%;
+    position: fixed;
+    top: 10px;
+    text-align: center;
+    font-weight: bold;
+    z-index: 100;
+}
+
+.ct-header-description {
+    color: white;
+    border-radius: 10px;
+    width: 50%;
+    top: 10px;
+    text-align: center;
 }
 
 .gym-search-amt {
@@ -293,7 +314,7 @@ body * {
 
 .ct-logo {
     font-size: 100px;
-    color: rgb(112, 182, 243);
+    color: rgb(90, 17, 114);
 }
 
 .ct-button {

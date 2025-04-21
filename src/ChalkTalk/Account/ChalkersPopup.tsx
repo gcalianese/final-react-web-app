@@ -29,7 +29,7 @@ export default function ChalkersPopup({ userFollowers, userFollowing, closePopup
             <div className="popup-content">
                 <div className="popup-scroll-container">
                     <div className="scroll-box">
-                        <h5>Followers: {userFollowers.length}</h5>
+                        <h5>Followers: <br/>{userFollowers.length}</h5>
                         {userFollowers.map((follower) => (
                             <Link to={`/Account/Profile/${follower._id}`} key={`followedby-${follower._id}`}>
                                 {follower.username}
@@ -38,7 +38,7 @@ export default function ChalkersPopup({ userFollowers, userFollowing, closePopup
                         ))}
                     </div>
                     <div className="scroll-box">
-                        <h5>Following: {userFollowing.length}</h5>
+                        <h5>Following: <br/>{userFollowing.length}</h5>
                         {userFollowing.map((follows) => (
                             <Link to={`/Account/Profile/${follows._id}`} key={`follows-${follows._id}`}>
                                 {follows.username}

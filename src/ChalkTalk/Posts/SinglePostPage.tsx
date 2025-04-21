@@ -5,7 +5,7 @@ import { Button, Col, FormControl, Row } from "react-bootstrap";
 import { FaTrash, FaRegComment } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaPencil } from "react-icons/fa6";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
 import * as likeClient from "./likesClient";
@@ -13,7 +13,6 @@ import Popup from "../Account/Popup";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
-import { IoMdCheckmark } from "react-icons/io";
 import { ImCheckmark } from "react-icons/im";
 
 export default function SinglePostPage() {

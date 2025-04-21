@@ -193,16 +193,16 @@ export default function Profile() {
                     {edit && <FormControl defaultValue={editedUser.firstName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, firstName: e.target.value })} />}
                 </ListGroup.Item>
 
-                <ListGroup.Item>
-                    {/* Last name*/}
-                    {currentUser && <>
+                {currentUser && <>
+                    <ListGroup.Item>
+                        {/* Last name*/}
                         <b>Last Name:</b> <br />
                         {/* Not editing */}
                         {!edit && <span>{userProfile.lastName}</span>}
                         {/* Editing */}
                         {edit && <FormControl defaultValue={editedUser.lastName} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, lastName: e.target.value })} />}
-                    </>}
-                </ListGroup.Item>
+                    </ListGroup.Item>
+                </>}
 
                 <ListGroup.Item>
                     {/* Username, not editing */}
@@ -227,9 +227,9 @@ export default function Profile() {
                     </ListGroup.Item>
                 )}
 
-                <ListGroup.Item>
-                    {/* Role */}
-                    {currentUser && <>
+                {currentUser && <>
+                    <ListGroup.Item>
+                        {/* Role */}
                         <b>Role:</b> <br />
                         {/* Not admin or not editing */}
                         {(currentUser.role !== "ADMIN" || !edit) && <span>{userProfile.role}</span>}
@@ -243,20 +243,21 @@ export default function Profile() {
                                 <option value="USER">USER</option>
                             </select>
                         )}
-                    </>}
-                </ListGroup.Item>
+                    </ListGroup.Item>
+                </>}
 
-                <ListGroup.Item>
-                    {/* Email */}
-                    {currentUser &&
+                {currentUser &&
+                    <ListGroup.Item>
+                        {/* Email */}
                         <span>
                             <b>Email:</b> <br />
                             {/* Not editing */}
                             {!edit && <span>{userProfile.email}</span>}
                             {/* Not editing */}
                             {edit && <FormControl defaultValue={editedUser.email} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} />}
-                        </span>}
-                </ListGroup.Item>
+                        </span>
+                    </ListGroup.Item>
+                }
 
                 {(!hasCid || (currentUser && currentUser.role === "ADMIN")) && (
                     <ListGroup.Item>
@@ -272,17 +273,18 @@ export default function Profile() {
                     </ListGroup.Item>
                 )}
 
-                <ListGroup.Item>
-                    {/* Home gym */}
-                    {currentUser &&
+                {currentUser &&
+                    <ListGroup.Item>
+                        {/* Home gym */}
                         <span>
                             <b>Home Gym:</b> <br />
                             {/* Not editing */}
                             {!edit && <span>{userProfile.homeGym}</span>}
                             {/* Editing */}
                             {edit && <FormControl defaultValue={editedUser.homeGym} onKeyDown={(e) => e.key === 'Enter' && handleEnter()} onChange={(e) => setEditedUser({ ...editedUser, homeGym: e.target.value })} />}
-                        </span>}
-                </ListGroup.Item>
+                        </span>
+                    </ListGroup.Item>
+                }
 
                 <ListGroup.Item>
                     {/* Number of posts */}

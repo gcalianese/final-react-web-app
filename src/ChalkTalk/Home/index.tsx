@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router";
 import "./homeStyle.css"
 
 export default function Home() {
@@ -14,8 +15,14 @@ export default function Home() {
                 <div className="left-panel">
                     <h2>About the Team</h2>
                     <p>
-                        Grace and Haig are students in CS4550-02 Web Development who are passoniate
+                        Grace Calianese and Haig Shirozian are students in CS4550-02 Web Development who are passoniate
                         about both programming and rock climbing.
+                    </p>
+                    <Link to={"https://github.com/gcalianese/final-node-server-app"} id="ct-node-server-repo">Node Server Repo</Link>
+                    <br />
+                    <Link to={"https://github.com/gcalianese/final-react-web-app" } id="ct-web-app-repo">React Web App Repo</Link>
+                    <p>
+
                     </p>
                 </div>
                 <div className="right-panel">

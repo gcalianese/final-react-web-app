@@ -5,15 +5,13 @@ import * as accountClient from "./client"
 import * as accountReducer from "./reducer"
 import * as postClient from "../Posts/client"
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Button, FormControl, ListGroup, Table } from "react-bootstrap";
-import { Link } from "react-router";
+import { Button, FormControl, ListGroup } from "react-bootstrap";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
 import "./profileStyle.css";
 import { v4 as uuidv4 } from "uuid";
-import { RxCross2 } from "react-icons/rx";
 import ChalkersPopup from "./ChalkersPopup";
+import Popup from "./Popup";
 
 
 type User = {
@@ -30,6 +28,18 @@ type User = {
     followerCount: string;
     followingCount: string;
     postCount: string;
+};
+
+type Post = {
+    _id: string;
+    postedBy: string;
+    username: string;
+    category: "SENDS" | "GEAR" | "FT";
+    img: string;
+    caption: string;
+    likedBy: string[];
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 export enum UserType {
@@ -69,10 +79,11 @@ export default function Profile() {
     const [userProfile, setUserProfile] = useState<User>(defaultUser);
     const [userFollowers, setUserFollowers] = useState<User[]>([]);
     const [userFollowing, setUserFollowing] = useState<User[]>([]);
-    const [userPosts, setUserPosts] = useState<User[]>([]);
+    const [userPosts, setUserPosts] = useState<Post[]>([]);
     const [edit, setEdit] = useState(false);
     const [editedUser, setEditedUser] = useState<User>(defaultUser);
     const [followings, setFollowings] = useState<Following[]>([]);
+    const [showSigninPopup, setShowSigninPopup] = useState(false);
 
     const [displayChalkers, setDisplayChalkers] = useState<boolean>(false);
 
@@ -142,6 +153,14 @@ export default function Profile() {
                 await accountClient.addFollowing(following);
             }
             fetchInfo();
+        }
+    }
+
+    const handlePreviewClick = (pid: string) => {
+        if (currentUser) {
+            navigate(`/Posts/${pid}`)
+        } else {
+            setShowSigninPopup(true);
         }
     }
 
@@ -273,6 +292,13 @@ export default function Profile() {
             </ListGroup>
 
             <br />
+            {!edit &&
+                <><div className="mb-4">
+                    {userPosts.map((post) => (
+                        post.img ? <img key={post._id} src={post.img} width="100px" alt="Post preview" style={{ cursor: 'pointer' }} onClick={() => handlePreviewClick(post._id)} /> : null
+                    ))}
+                </div>
+                </>}
             {!hasCid && !edit && (
                 <Button onClick={signout} className="w-100 mb-2 ct-btn">
                     Sign out
@@ -282,6 +308,16 @@ export default function Profile() {
                 <Button onClick={handleCancel} className="w-100 mb-2 ct-btn">
                     Cancel edits
                 </Button>
+            )}
+            {showSigninPopup && (
+                <Popup
+                    restriction={"view this post"}
+                    onClose={() => setShowSigninPopup(false)}
+                    onSignIn={() => {
+                        setShowSigninPopup(false);
+                        navigate("/Account/Signin");
+                    }}
+                />
             )}
         </div>
     );

@@ -38,13 +38,13 @@ export default function Signup() {
     return (
 
         <div id="ct-signup-screen">
-            <h1>Sign up</h1>
+            <h1 className="ct-sign-header"><b>Sign up</b></h1>
             <Form.Control defaultValue={username} placeholder="Username" onChange={(e) => setUsername(e.target.value)} className="ct-username d-block mb-2" /><br />
             <Form.Control defaultValue={password} placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} className="wd-password mb-2 d-block" /><br />
             <Form.Control defaultValue={firstName} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} className="ct-first-name d-block mb-2" /><br />
             <Form.Control defaultValue={lastName} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} className="ct-last-name d-block mb-2" /><br />
-            <Button onClick={signup} className="btn btn-primary w-100 mb-2">Sign up</Button>
-            <Link to="/Account/Signin">Sign in</Link>
+            <Button onClick={signup} className="btn ct-btn w-100 mb-2">Sign up</Button>
+            <Link to="/Account/Signin" className="ct-text-dark-purple">Sign in</Link>
         </div>
 
     );

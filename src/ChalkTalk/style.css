@@ -12,13 +12,11 @@ body * {
 
 .ct-home-page,
 .ct-profile-container,
-#ct-signin-screen,
-#ct-signup-screen,
 #ct-search-page,
 #ct-users {
+    /* Move content to the right of the navbar and below header */
     margin-left: 200px;
     margin-top: 50px;
-    /* Move content to the right of the navbar and below header */
 }
 
 #ct {

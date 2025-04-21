@@ -107,3 +107,20 @@
     border-width: 10px;
     border-radius: 20px;
 }
+
+.ct-sign-header {
+    color: rgb(90, 17, 114);
+}
+
+#ct-signin-screen,
+#ct-signup-screen {
+    /* Move content to the right of the navbar and below header */
+    margin-left: 200px;
+    margin-top: 50px;
+
+    background-color: #f0f4ff;
+    padding: 20px;
+    text-align: center;
+    width: 75%;
+    border-radius: 20px;
+}

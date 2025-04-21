@@ -5,6 +5,7 @@
     color: #333;
     min-height: 100vh;
     box-sizing: border-box;
+    border-radius: 10px;
 }
 
 .ct-home-page h1 {

@@ -32,7 +32,6 @@ body * {
     background-color: rgb(112, 182, 243);
     position: fixed;
     padding-top: 3px;
-    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
     padding-left: 200px;
     z-index: 9;
 }
@@ -135,43 +134,34 @@ body * {
 
 .ct-posts-container {
     margin-left: 200px;
-    margin-top: 50px;
-    padding: 20px;
 }
 
 .add-post-button {
-    position: absolute;
-    height: 70px;
-    width: 70px;
-    top: 20px;
-    right: 20px;
-    border-radius: 50%;
-    font-size: 24px;
-    background-color: rgb(90, 17, 114);
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    font-size: 25px;
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
 }
 
 .add-post-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .header {
     padding: 15px;
     height: 60px;
     background-color: rgb(112, 182, 243);
-    color: rgb(90, 17, 114);
+    border-color: white;
+    border-width: thick;
+    color: white;
     font-size: 22px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
 }
 
 .gym-search-amt {

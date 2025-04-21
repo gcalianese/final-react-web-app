@@ -1,6 +1,7 @@
 import { FormControl } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import "./singlePostStyle.css"
 
 type PostPreviewProps = {
     previewURL: string;
@@ -42,19 +43,19 @@ export default function PostPreview({ previewURL, onCancel, onPost, file, select
                     />
                     {!isImage && (
                         <>
-                            <Button onClick={selectNewFile}>Select another file</Button>
+                            <Button className="ct-btn" onClick={selectNewFile}>Select another file</Button>
                             <p><b>{previewURL}</b> is not an image.</p>
                         </>
                     )}
 
                     <div className="modal-buttons">
-                        <button onClick={() => {
+                        <button className="bg-danger text-white" onClick={() => {
                             if (previewURL) {
                                 URL.revokeObjectURL(previewURL);
                             }
                             onCancel();
-                        }}>Cancel</button>
-                        <button onClick={handlePostClick}>Post</button>
+                        }}>  <b>Cancel</b></button>
+                        <Button className="ct-btn" onClick={handlePostClick}>Post</Button>
                     </div>
                 </div>
             </div>

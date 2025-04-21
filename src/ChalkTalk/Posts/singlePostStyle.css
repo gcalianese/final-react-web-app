@@ -52,3 +52,13 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
+
+.ct-btn {
+    background-color: rgb(90, 17, 114);
+    border-radius: 8px;
+    color: white;
+}
+
+.ct-btn:hover {
+    background-color: rgb(90, 17, 114);
+}

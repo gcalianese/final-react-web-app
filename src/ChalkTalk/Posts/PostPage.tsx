@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AiOutlineLike } from "react-icons/ai";
 import { FaPencil } from "react-icons/fa6";
 import { FormControl } from "react-bootstrap";
+import { ImCheckmark } from "react-icons/im";
 
 
 export default function PostPage({ cat }: { cat: string }) {
@@ -258,12 +259,10 @@ export default function PostPage({ cat }: { cat: string }) {
     return (
         <div className="ct-posts-container">
             <div className="header">
-                {cat}
-                <span className="add-post-button">
-                    <Button onClick={handleAddPost}>
-                        <label ><FaPlus /> Add a {cat} Post</label>
-                    </Button>
-                </span>
+                Welcome to {cat}
+                <Button className="ct-btn add-post-button" onClick={handleAddPost}>
+                    <label ><FaPlus /> {cat} Post</label>
+                </Button>
             </div>
             <input
                 type="file"
@@ -271,21 +270,166 @@ export default function PostPage({ cat }: { cat: string }) {
                 style={{ display: "none" }} // Hide the input element
                 onChange={handleFileChange}
             />
-            <div className="ct-posts-posts d-flex justify-content-center">
+            <div className="">
                 <table className="responsive-table">
-                    <thead>
-                        <tr>
-                            <th className="posts-header">Posts</th>
-                            <th className="comments-header">Comments</th>
-                        </tr>
-                    </thead>
                     <tbody>
-
                         {posts && (
+                            <>
+                                {posts.map((post) => (
+                                    <tr>
+                                        <div className="">
+                                            {/* Post & comments row */}
+                                            <Row>
+                                                {/* Post image */}
+                                                <Col xs={4} className="ct-post-cell">
+                                                    <div key={post._id}>
+                                                        {/* Post time */}
+                                                        <label className="ct-post-time d-flex p-1">
+                                                            Posted at {" "}
+                                                            {new Date(post.createdAt).toLocaleString("en-US", {
+                                                                hour12: true,
+                                                            }).replace(",", "")}
+                                                        </label>
+                                                        {/* Image */}
+                                                        <span onClick={() => handlePostClick(post)}>
+                                                            {post.img && <img src={post.img} style={{ width: '100%', height: 'auto' }} alt="Post" />}<br />
+                                                        </span>
+                                                        {/* Username, caption, and buttons */}
+                                                        <div className="ct-post-info">
+                                                            {/* Username and caption */}
+                                                            <span>
+                                                                {/* Caption */}
+                                                                <div className="ps-3 pe-3 pt-3">
+                                                                    {post._id !== editCaptionCid && (
+                                                                        <span onClick={() => handleEditCaption(post)}>
+                                                                            {post.caption}
+                                                                        </span>)}
+                                                                </div>
+                                                                {/* Editing caption */}
+                                                                {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
+                                                                    <div className="ps-2 pe-2">
+                                                                        <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
+                                                                            if (e.key === 'Enter') {
+                                                                                e.preventDefault();
+                                                                                handleEnterEditCaption(post);
+                                                                            }
+                                                                        }} onChange={(e) => setCaptionToEdit(e.target.value)}>
+                                                                        </FormControl>
+                                                                    </div>
+                                                                )}
+                                                            </span>
+                                                            <hr />
+                                                            {/* Username & Buttons */}
+                                                            <span className="d-flex justify-content-between">
+                                                                {/* Username */}
+                                                                <span className="ct-text-dark-purple ps-3 pt-1" onClick={() => { navigate(`/Account/Profile/${post.postedBy}`) }}>
+                                                                    {post.username}
+                                                                </span>
+                                                                <div>
+                                                                    <Button className="ct-like-comment-button" style={{
+                                                                        backgroundColor:
+                                                                            currentUser && liked(post._id, currentUser._id)
+                                                                                ? "rgb(164, 102, 182)"
+                                                                                : "",
+                                                                    }}
+                                                                        onClick={() => handleLike(post._id)}>
+                                                                        <AiOutlineLike /> {likes.filter((like) => like.postId === post._id).length}
+                                                                    </Button>
+                                                                    <Button className="ct-like-comment-button" onClick={() => handleAddComment(post._id)}>
+                                                                        <FaRegComment />
+                                                                    </Button>
 
-                            <>                             {posts.map((post) => (
-                                <tr>
-                                    <td className="ct-post-cell">
+                                                                    {currentUser && currentUser._id === post.postedBy && (
+                                                                        <Button
+                                                                            className="ct-like-comment-button"
+                                                                            onClick={() => post._id === editCaptionCid ? handleEnterEditCaption(post) : handleEditCaption(post)}>
+                                                                            {post._id === editCaptionCid ? <ImCheckmark /> : <FaPencil />}
+                                                                        </Button>
+                                                                    )}
+
+                                                                    {currentUser &&
+                                                                        (currentUser._id === post.postedBy ||
+                                                                            currentUser.role === "ADMIN" ||
+                                                                            currentUser.role === "MOD") && (
+                                                                            <Button className="ct-like-comment-button bg-danger" onClick={() => handleDelete(post._id)} >
+                                                                                <FaTrash />
+                                                                            </Button>
+                                                                        )}
+                                                                </div>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                                {/* Actual comments */}
+                                                <Col xs={8} className="ct-comment-cell">
+                                                    {getCommentsForPost(post._id).map((comment) => (
+                                                        // Extra div to have <hr />
+                                                        <div>
+                                                            <div key={comment._id} className="d-flex justify-content-between" >
+                                                                {/* Username and comment */}
+                                                                <span>
+                                                                    <span>
+                                                                        <span className="ct-text-dark-purple pe-3" onClick={() => { navigate(`/Account/Profile/${comment.postedBy}`) }}>
+                                                                            {comment.username}
+                                                                        </span>
+                                                                        <br />
+                                                                    </span>
+                                                                </span>
+
+                                                                {/* Buttons */}
+                                                                {editCommentCid === comment._id &&
+                                                                <span>
+                                                                    {currentUser &&
+                                                                        currentUser._id === comment.postedBy && (
+                                                                            <Button
+                                                                                variant="outline-secondary"
+                                                                                className="px-2 py-1"
+                                                                                size="lg"
+                                                                                onClick={() => handleEditComment(comment)}>
+                                                                                {editCommentCid === comment._id
+                                                                                    ? <ImCheckmark />
+                                                                                    : <FaPencil />}
+                                                                            </Button>
+                                                                        )}
+                                                                    {currentUser &&
+                                                                        (currentUser._id === comment.postedBy ||
+                                                                            currentUser.role === "ADMIN" ||
+                                                                            currentUser.role === "MOD") && (
+                                                                            <Button
+                                                                                variant="outline-danger"
+                                                                                className="ms-2"
+                                                                                onClick={() =>
+                                                                                    handleDeleteComment(comment._id)
+                                                                                }>
+                                                                                <FaTrash />
+                                                                            </Button>
+                                                                        )}
+                                                                </span>
+                                                                }
+                                                            </div>
+                                                            {/* Actual Comment */}
+                                                            <div>
+                                                                {comment._id !== editCommentCid ? comment.comment : null}
+                                                                {currentUser &&
+                                                                    currentUser._id === comment.postedBy &&
+                                                                    comment._id === editCommentCid && (
+                                                                        <FormControl
+                                                                            defaultValue={commentToEdit}
+                                                                            onKeyDown={(e) =>
+                                                                                e.key === "Enter" &&
+                                                                                handleEnterEditComment(comment)
+                                                                            }
+                                                                            onChange={(e) => setCommentToEdit(e.target.value)} />
+                                                                    )}
+                                                            </div>
+                                                            <hr />
+                                                        </div>
+                                                    ))}
+
+                                                </Col>
+                                            </Row>
+                                        </div>
+                                        {/* <td className="ct-post-cell">
                                         <div key={post._id} className="border post">
                                             <br />
                                             <span onClick={() => handlePostClick(post)}>
@@ -340,9 +484,11 @@ export default function PostPage({ cat }: { cat: string }) {
                                                 )}
                                             </div>
                                         ))}
-                                    </td>
-                                </tr>
-                            ))}
+                                    </td> */}
+                                    <br />
+                                    </tr>
+                                    
+                                ))}
                             </>
                         )}
 

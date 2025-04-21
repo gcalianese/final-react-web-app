@@ -7,7 +7,7 @@ import ProtectedRoute from "../ProtectedRoutes";
 export default function Account() {
     return (
         <div id="ct-account">
-            < div id="ct-account-routes">
+            <div id="ct-account-routes">
                 <Routes>
                     <Route path="/" element={<Navigate to="/Account/Signin" />} />
                     <Route path="/Signin" element={< Signin />} />

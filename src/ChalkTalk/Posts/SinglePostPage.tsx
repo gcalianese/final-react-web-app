@@ -200,19 +200,23 @@ export default function SinglePostPage() {
                                 {/* Username and caption */}
                                 <span>
                                     {/* Caption */}
-                                    <div className="ps-2 pe-2 pt-2  ">
+                                    <div className="ps-3 pe-3 pt-3">
                                         {post._id !== editCaptionCid && (
                                             <span onClick={() => handleEditCaption(post)}>
                                                 {post.caption}
                                             </span>)}
                                     </div>
+                                    {/* Editing caption */}
                                     {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
-                                        <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                handleEnterEditCaption(post);
-                                            }
-                                        }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
+                                        <div className="ps-2 pe-2">
+                                            <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    handleEnterEditCaption(post);
+                                                }
+                                            }} onChange={(e) => setCaptionToEdit(e.target.value)}>
+                                            </FormControl>
+                                        </div>
                                     )}
                                 </span>
                                 <hr />
@@ -235,11 +239,28 @@ export default function SinglePostPage() {
                                         <Button className="ct-like-comment-button" onClick={() => handleAddComment(post._id)}>
                                             <FaRegComment />
                                         </Button>
+
+
+
+
+                                        {currentUser && currentUser._id === post.postedBy && (
+                                            <Button
+                                                className="ct-like-comment-button"
+                                                onClick={() => post._id === editCaptionCid ? handleEnterEditCaption(post) : handleEditCaption(post)}>
+                                                {post._id === editCaptionCid ? <ImCheckmark /> : <FaPencil />}
+                                            </Button>
+                                        )}
+
+
+
+
+
+
                                         {currentUser &&
                                             (currentUser._id === post.postedBy ||
                                                 currentUser.role === "ADMIN" ||
                                                 currentUser.role === "MOD") && (
-                                                <Button onClick={() => handleDelete(post._id)} size="lg">
+                                                <Button className="ct-like-comment-button bg-danger" onClick={() => handleDelete(post._id)} >
                                                     <FaTrash />
                                                 </Button>
                                             )}

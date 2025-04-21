@@ -9,9 +9,7 @@ import { useParams } from "react-router";
 import * as postClient from "./client";
 import * as commentClient from "../Comments/client";
 import * as likeClient from "./likesClient";
-import Popup from "../Account/Popup";
 import { v4 as uuidv4 } from "uuid";
-import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
 import { ImCheckmark } from "react-icons/im";
 
@@ -49,9 +47,6 @@ export default function SinglePostPage() {
     const [post, setPost] = useState<Post | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const [likes, setLikes] = useState<Like[]>([]);
-    const [showSigninPopup, setShowSigninPopup] = useState(false);
-    const [redirectToSignin, setRedirectToSignin] = useState(false);
-    const [restriction, setRestriction] = useState("");
     const [editCommentCid, setEditCommentCid] = useState("");
     const [commentToEdit, setCommentToEdit] = useState("");
     const [captionToEdit, setCaptionToEdit] = useState("");
@@ -94,9 +89,6 @@ export default function SinglePostPage() {
             } else {
                 await handleUnlike(pid, currentUser._id);
             }
-        } else {
-            setRestriction("like a post");
-            setShowSigninPopup(true);
         }
     };
 
@@ -123,9 +115,6 @@ export default function SinglePostPage() {
             await commentClient.createComment(comment);
             fetchComments();
             handleEditComment(comment as Comment);
-        } else {
-            setRestriction("comment on a post");
-            setShowSigninPopup(true);
         }
     };
 
@@ -240,9 +229,6 @@ export default function SinglePostPage() {
                                             <FaRegComment />
                                         </Button>
 
-
-
-
                                         {currentUser && currentUser._id === post.postedBy && (
                                             <Button
                                                 className="ct-like-comment-button"
@@ -250,11 +236,6 @@ export default function SinglePostPage() {
                                                 {post._id === editCaptionCid ? <ImCheckmark /> : <FaPencil />}
                                             </Button>
                                         )}
-
-
-
-
-
 
                                         {currentUser &&
                                             (currentUser._id === post.postedBy ||
@@ -336,18 +317,6 @@ export default function SinglePostPage() {
                     </Col>
                 </Row>
             </div>
-
-            {showSigninPopup && (
-                <Popup
-                    restriction={restriction}
-                    onClose={() => setShowSigninPopup(false)}
-                    onSignIn={() => {
-                        setShowSigninPopup(false);
-                        setRedirectToSignin(true);
-                    }}
-                />
-            )}
-            {redirectToSignin && <Navigate to="/Account/Signin" />}
         </div>
     );
 }

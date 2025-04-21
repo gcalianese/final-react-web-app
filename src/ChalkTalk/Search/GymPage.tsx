@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import PurpleStar from "./PurpleStar";
+import { ListGroup } from "react-bootstrap";
 
 interface Gym {
     id: number;
@@ -46,11 +47,22 @@ export default function GymPage() {
                 :
                 <div>
                     <h1 className="ct-sign-header"> Details for {gym.name} <PurpleStar gymId={gym.id.toString()} /> </h1>
-                    Gym Id: {gym.id} <br />
-                    Gym coordinates: {gym.lon} (lon) x {gym.lat} (lat) <br />
-                    Gym address: {gym.address.house} {gym.address.street} {gym.address.city} {gym.address.postcode} <br />
-                    Gym website: {gym.website} <br />
-                    {gym.website.includes("http") && <iframe src={gym.website} width="80%" height="550px"/>}
+                    <ListGroup>
+                        <ListGroup.Item >
+                            Gym Id: {gym.id} <br />
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            Gym coordinates: {gym.lon} (lon) x {gym.lat} (lat) <br />
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            Gym address: {gym.address.house} {gym.address.street} {gym.address.city} {gym.address.postcode} <br />
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            Gym website: {gym.website} <br />
+                        </ListGroup.Item>
+                    </ListGroup>
+
+                    {gym.website.includes("http") && <iframe src={gym.website} width="80%" height="550px" />}
                 </div>}
         </div>
     );

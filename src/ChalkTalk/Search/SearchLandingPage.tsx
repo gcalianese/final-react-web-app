@@ -42,7 +42,7 @@ export default function SearchLandingPage() {
     return (
 
         <div id="ct-search-page">
-            <h1>Gyms Near You</h1>
+            <h1 className="ct-sign-header">Gyms Near You</h1>
             <SearchControls />
             <SearchResults />
         </div>

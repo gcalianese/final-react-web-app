@@ -9,3 +9,38 @@
         margin-left: 0px;
     }
 }
+
+.ct-text-dark-purple {
+    color: rgb(90, 17, 114);
+}
+
+.ct-text-dark-purple:hover {
+    color: rgb(90, 17, 114);
+    text-decoration: underline;
+}
+
+.ct-comment-cell {
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.ct-like-comment-button {
+    border: 0;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
+.ct-post-time {
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: #666666;
+    justify-content: center;
+}
+
+.ct-post-info {
+    background-color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}

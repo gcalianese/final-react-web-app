@@ -1,7 +1,7 @@
 import "./singlePostStyle.css";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { Button, FormControl } from "react-bootstrap";
+import { Button, Col, FormControl, Row } from "react-bootstrap";
 import { FaTrash, FaRegComment } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaPencil } from "react-icons/fa6";
@@ -13,6 +13,8 @@ import Popup from "../Account/Popup";
 import { v4 as uuidv4 } from "uuid";
 import { Navigate } from "react-router";
 import { useNavigate } from "react-router";
+import { IoMdCheckmark } from "react-icons/io";
+import { ImCheckmark } from "react-icons/im";
 
 export default function SinglePostPage() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -174,36 +176,65 @@ export default function SinglePostPage() {
 
     if (!post) return <div>Loading...</div>;
 
+
+
+
+
     return (
         <div id="single-post-container">
-            <div className="ct-posts-posts d-flex justify-content-center">
-                <table className="responsive-table">
-                    <thead>
-                        <tr>
-                            <th className="posts-header">Post</th>
-                            <th className="comments-header">Comments</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="ct-post-cell">
-                                <div key={post._id} className="border post">
-                                    <br />
-                                    {post.img && <img src={post.img} width="400px" alt="Post" />}<br />
-                                    <span>
-                                        <Button
-                                            style={{
-                                                backgroundColor:
-                                                    currentUser && liked(post._id, currentUser._id)
-                                                        ? "rgb(164, 102, 182)"
-                                                        : "",
-                                            }}
-                                            onClick={() => handleLike(post._id)}
-                                        >
-                                            <AiOutlineLike /> Like
+            <div className="">
+                {/* Post & comments row */}
+                <Row>
+                    {/* Post image */}
+                    <Col xs={4} className="ct-post-cell">
+                        <div key={post._id}>
+                            {/* Post time */}
+                            <label className="ct-post-time d-flex p-1">
+                                Posted at {" "}
+                                {new Date(post.createdAt).toLocaleString("en-US", {
+                                    hour12: true,
+                                }).replace(",", "")}
+                            </label>
+                            {post.img && <img src={post.img} style={{ width: '100%', height: 'auto' }} alt="Post" />}<br />
+                            {/* Username, caption, and buttons */}
+                            <div className="ct-post-info">
+                                {/* Username and caption */}
+                                <span>
+                                    {/* Caption */}
+                                    <div className="ps-2 pe-2 pt-2  ">
+                                        {post._id !== editCaptionCid && (
+                                            <span onClick={() => handleEditCaption(post)}>
+                                                {post.caption}
+                                            </span>)}
+                                    </div>
+                                    {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
+                                        <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleEnterEditCaption(post);
+                                            }
+                                        }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
+                                    )}
+                                </span>
+                                <hr />
+                                {/* Username & Buttons */}
+                                <span className="d-flex justify-content-between">
+                                    {/* Username */}
+                                    <span className="ct-text-dark-purple ps-3 pt-1" onClick={() => { navigate(`/Account/Profile/${post.postedBy}`) }}>
+                                        {post.username}
+                                    </span>
+                                    <div>
+                                        <Button className="ct-like-comment-button" style={{
+                                            backgroundColor:
+                                                currentUser && liked(post._id, currentUser._id)
+                                                    ? "rgb(164, 102, 182)"
+                                                    : "",
+                                        }}
+                                            onClick={() => handleLike(post._id)}>
+                                            <AiOutlineLike /> {likes.filter((like) => like.postId === post._id).length}
                                         </Button>
-                                        <Button onClick={() => handleAddComment(post._id)}>
-                                            <FaRegComment /> Comment
+                                        <Button className="ct-like-comment-button" onClick={() => handleAddComment(post._id)}>
+                                            <FaRegComment />
                                         </Button>
                                         {currentUser &&
                                             (currentUser._id === post.postedBy ||
@@ -213,65 +244,39 @@ export default function SinglePostPage() {
                                                     <FaTrash />
                                                 </Button>
                                             )}
-                                        Likes: {likes.filter((like) => like.postId === post._id).length}
-                                    </span>
-                                    <br />
-                                    <Link to={`/Account/Profile/${post.postedBy}`} key={post._id}> {post.username}</Link>:    {post._id !== editCaptionCid && (<label onClick={() => handleEditCaption(post)}>{post.caption}</label>)}
-                                    {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
-                                        <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                handleEnterEditCaption(post);
-                                            }
-                                        }} onChange={(e) => setCaptionToEdit(e.target.value)}></FormControl>
-                                    )}
-                                    <label style={{ color: "#666666" }}>
-                                        <br />
-                                        Posted at {" "}
-                                        {new Date(post.createdAt).toLocaleString("en-US", {
-                                            hour12: true,
-                                        }).replace(",", "")}
-                                    </label>
-                                </div>
-                            </td>
-                            <td className="ct-comment-cell">
-                                {comments.map((comment) => (
-                                    <div key={comment._id}>
-                                        <label>
-                                            <Link to={`/Account/Profile/${comment.postedBy}`}>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </Col>
+                    {/* Actual comments */}
+                    <Col xs={8} className="ct-comment-cell">
+                        {comments.map((comment) => (
+                            // Extra div to have <hr />
+                            <div>
+                                <div key={comment._id} className="d-flex justify-content-between" >
+                                    {/* Username and comment */}
+                                    <span>
+                                        <span>
+                                            <span className="ct-text-dark-purple pe-3" onClick={() => { navigate(`/Account/Profile/${comment.postedBy}`) }}>
                                                 {comment.username}
-                                            </Link>
-                                            :{" "}
-                                            {comment._id !== editCommentCid ? comment.comment : null}
-                                        </label>
-                                        {currentUser &&
-                                            currentUser._id === comment.postedBy &&
-                                            comment._id === editCommentCid && (
-                                                <FormControl
-                                                    defaultValue={commentToEdit}
-                                                    onKeyDown={(e) =>
-                                                        e.key === "Enter" &&
-                                                        handleEnterEditComment(comment)
-                                                    }
-                                                    onChange={(e) =>
-                                                        setCommentToEdit(e.target.value)
-                                                    }
-                                                ></FormControl>
-                                            )}
+                                            </span>
+                                            <br />
+                                        </span>
+                                    </span>
+
+                                    {/* Buttons */}
+                                    <span>
                                         {currentUser &&
                                             currentUser._id === comment.postedBy && (
                                                 <Button
                                                     variant="outline-secondary"
                                                     className="px-2 py-1"
                                                     size="lg"
-                                                    onClick={() => handleEditComment(comment)}
-                                                >
-                                                    {editCommentCid !== comment._id && (
-                                                        <FaPencil className="me-1" />
-                                                    )}
+                                                    onClick={() => handleEditComment(comment)}>
                                                     {editCommentCid === comment._id
-                                                        ? "Done"
-                                                        : "Edit"}
+                                                        ? <ImCheckmark />
+                                                        : <FaPencil />}
                                                 </Button>
                                             )}
                                         {currentUser &&
@@ -283,18 +288,35 @@ export default function SinglePostPage() {
                                                     className="ms-2"
                                                     onClick={() =>
                                                         handleDeleteComment(comment._id)
-                                                    }
-                                                >
-                                                    <FaTrash /> Delete
+                                                    }>
+                                                    <FaTrash />
                                                 </Button>
                                             )}
-                                    </div>
-                                ))}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    </span>
+                                </div>
+                                {/* Actual Comment */}
+                                <div>
+                                    {comment._id !== editCommentCid ? comment.comment : null}
+                                    {currentUser &&
+                                        currentUser._id === comment.postedBy &&
+                                        comment._id === editCommentCid && (
+                                            <FormControl
+                                                defaultValue={commentToEdit}
+                                                onKeyDown={(e) =>
+                                                    e.key === "Enter" &&
+                                                    handleEnterEditComment(comment)
+                                                }
+                                                onChange={(e) => setCommentToEdit(e.target.value)} />
+                                        )}
+                                </div>
+                                <hr />
+                            </div>
+                        ))}
+
+                    </Col>
+                </Row>
             </div>
+
             {showSigninPopup && (
                 <Popup
                     restriction={restriction}

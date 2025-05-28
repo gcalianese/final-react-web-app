@@ -20,22 +20,32 @@ import { ImCheckmark } from "react-icons/im";
 export default function PostPage({ cat }: { cat: string }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+    type User = {
+        _id: string;
+        username: string;
+        password: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        phoneNumber: string;
+        role: "ADMIN" | "MOD" | "USER";
+        homeGym: string;
+        favoritedGyms: string[];
+    }
+
     type Post = {
         _id: string;
-        postedBy: string;
-        username: string;
+        postedBy: User;
         category: "SENDS" | "GEAR" | "FT";
         img: string;
         caption: string;
-        likedBy: string[];
         createdAt: Date;
         updatedAt: Date;
     };
 
     type Comment = {
         _id: string;
-        postedBy: string;
-        username: string;
+        postedBy: User;
         postId: string;
         comment: string;
         createdAt: Date;
@@ -52,15 +62,10 @@ export default function PostPage({ cat }: { cat: string }) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [likes, setLikes] = useState<Like[]>([]);
 
-    // Fetch posts for user if logged in or all posts if not
+    // Fetch posts, excludes logged in user's posts
     const fetchPosts = async () => {
-        if (!currentUser) {
-            const posts = await postClient.getAllPostsForCat(cat);
-            setPosts(posts);
-        } else {
-            const posts = await postClient.getPostsForUser(cat, currentUser._id);
-            setPosts(posts);
-        }
+        const posts = await postClient.getAllPostsForCat(cat);
+        setPosts(posts);
     };
 
     // Fetch comments for the retreived posts
@@ -328,7 +333,7 @@ export default function PostPage({ cat }: { cat: string }) {
                                                             <span className="d-flex justify-content-between">
                                                                 {/* Username */}
                                                                 <span className="ct-text-dark-purple ps-3 pt-1" onClick={() => { navigate(`/Account/Profile/${post.postedBy}`) }}>
-                                                                    {post.username}
+                                                                    {post.postedBy.username}
                                                                 </span>
                                                                 <div>
                                                                     <Button className="ct-like-comment-button" style={{
@@ -374,8 +379,8 @@ export default function PostPage({ cat }: { cat: string }) {
                                                                 {/* Username and comment */}
                                                                 <span>
                                                                     <span>
-                                                                        <span className="ct-text-dark-purple pe-3" onClick={() => { navigate(`/Account/Profile/${comment.postedBy}`) }}>
-                                                                            {comment.username}
+                                                                        <span className="ct-text-dark-purple pe-3" onClick={() => { navigate(`/Account/Profile/${comment.postedBy._id}`) }}>
+                                                                            {comment.postedBy.username}
                                                                         </span>
                                                                         <br />
                                                                     </span>
@@ -383,40 +388,40 @@ export default function PostPage({ cat }: { cat: string }) {
 
                                                                 {/* Buttons */}
                                                                 {editCommentCid === comment._id &&
-                                                                <span>
-                                                                    {currentUser &&
-                                                                        currentUser._id === comment.postedBy && (
-                                                                            <Button
-                                                                                variant="outline-secondary"
-                                                                                className="px-2 py-1"
-                                                                                size="lg"
-                                                                                onClick={() => handleEditComment(comment)}>
-                                                                                {editCommentCid === comment._id
-                                                                                    ? <ImCheckmark />
-                                                                                    : <FaPencil />}
-                                                                            </Button>
-                                                                        )}
-                                                                    {currentUser &&
-                                                                        (currentUser._id === comment.postedBy ||
-                                                                            currentUser.role === "ADMIN" ||
-                                                                            currentUser.role === "MOD") && (
-                                                                            <Button
-                                                                                variant="outline-danger"
-                                                                                className="ms-2"
-                                                                                onClick={() =>
-                                                                                    handleDeleteComment(comment._id)
-                                                                                }>
-                                                                                <FaTrash />
-                                                                            </Button>
-                                                                        )}
-                                                                </span>
+                                                                    <span>
+                                                                        {currentUser &&
+                                                                            currentUser._id === comment.postedBy._id && (
+                                                                                <Button
+                                                                                    variant="outline-secondary"
+                                                                                    className="px-2 py-1"
+                                                                                    size="lg"
+                                                                                    onClick={() => handleEditComment(comment)}>
+                                                                                    {editCommentCid === comment._id
+                                                                                        ? <ImCheckmark />
+                                                                                        : <FaPencil />}
+                                                                                </Button>
+                                                                            )}
+                                                                        {currentUser &&
+                                                                            (currentUser._id === comment.postedBy._id ||
+                                                                                currentUser.role === "ADMIN" ||
+                                                                                currentUser.role === "MOD") && (
+                                                                                <Button
+                                                                                    variant="outline-danger"
+                                                                                    className="ms-2"
+                                                                                    onClick={() =>
+                                                                                        handleDeleteComment(comment._id)
+                                                                                    }>
+                                                                                    <FaTrash />
+                                                                                </Button>
+                                                                            )}
+                                                                    </span>
                                                                 }
                                                             </div>
                                                             {/* Actual Comment */}
                                                             <div>
                                                                 {comment._id !== editCommentCid ? comment.comment : null}
                                                                 {currentUser &&
-                                                                    currentUser._id === comment.postedBy &&
+                                                                    currentUser._id === comment.postedBy._id &&
                                                                     comment._id === editCommentCid && (
                                                                         <FormControl
                                                                             defaultValue={commentToEdit}
@@ -490,9 +495,9 @@ export default function PostPage({ cat }: { cat: string }) {
                                             </div>
                                         ))}
                                     </td> */}
-                                    <br />
+                                        <br />
                                     </tr>
-                                    
+
                                 ))}
                             </>
                         )}

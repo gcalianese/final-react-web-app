@@ -16,22 +16,36 @@ import { ImCheckmark } from "react-icons/im";
 export default function SinglePostPage() {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+
+    type User = {
+        _id: string;
+        username: string;
+        password: string;
+        firstName: string;
+        email: string;
+        phoneNumber: string;
+        lastName: string;
+        role: "ADMIN" | "MOD" | "USER";
+        loginId: string;
+        homeGym: string;
+        followerCount: string;
+        followingCount: string;
+        postCount: string;
+    };
+
     type Post = {
         _id: string;
-        postedBy: string;
-        username: string;
+        postedBy: User;
         category: "SENDS" | "GEAR" | "FT";
         img: string;
         caption: string;
-        likedBy: string[];
         createdAt: Date;
         updatedAt: Date;
     };
 
     type Comment = {
         _id: string;
-        postedBy: string;
-        username: string;
+        postedBy: User;
         postId: string;
         comment: string;
         createdAt: Date;
@@ -106,7 +120,6 @@ export default function SinglePostPage() {
             const comment = {
                 _id: uuidv4(),
                 postedBy: currentUser._id,
-                username: currentUser.username,
                 postId: pid,
                 comment: "",
                 createdAt: new Date(),
@@ -196,7 +209,7 @@ export default function SinglePostPage() {
                                             </span>)}
                                     </div>
                                     {/* Editing caption */}
-                                    {currentUser && currentUser._id === post.postedBy && post._id === editCaptionCid && (
+                                    {currentUser && currentUser._id === post.postedBy._id && post._id === editCaptionCid && (
                                         <div className="ps-2 pe-2">
                                             <FormControl defaultValue={captionToEdit} onKeyDown={(e) => {
                                                 if (e.key === 'Enter') {
@@ -213,7 +226,7 @@ export default function SinglePostPage() {
                                 <span className="d-flex justify-content-between">
                                     {/* Username */}
                                     <span className="ct-text-dark-purple ps-3 pt-1" onClick={() => { navigate(`/Account/Profile/${post.postedBy}`) }}>
-                                        {post.username}
+                                        {post.postedBy.username}
                                     </span>
                                     <div>
                                         <Button className="ct-like-comment-button" style={{
@@ -260,7 +273,7 @@ export default function SinglePostPage() {
                                     <span>
                                         <span>
                                             <span className="ct-text-dark-purple pe-3" onClick={() => { navigate(`/Account/Profile/${comment.postedBy}`) }}>
-                                                {comment.username}
+                                                {comment.postedBy.username}
                                             </span>
                                             <br />
                                         </span>
